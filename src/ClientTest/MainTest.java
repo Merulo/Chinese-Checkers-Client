@@ -1,7 +1,7 @@
-package sampleTest;
+package ClientTest;
 
 import static org.junit.Assert.*;
-import sample.Main;
+import Client.Main;
 
 public class MainTest {
     @org.junit.Test
