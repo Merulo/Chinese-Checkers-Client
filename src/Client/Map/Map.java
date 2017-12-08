@@ -1,4 +1,4 @@
-package Client;
+package Client.Map;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -69,7 +69,9 @@ public class Map {
         }
     }
     //displays the map
-    void display(GraphicsContext gc){
+    public void display(GraphicsContext gc){
+
+
         gc.setFill(Color.GREEN);
         gc.setLineWidth(5);
 
@@ -83,6 +85,7 @@ public class Map {
                     int dx = ((int)(Math.floor(size/2)) - j) * - (FIELDSIZE + SPACINGSIZE)/2;
 
                     gc.fillOval( (FIELDSIZE + SPACINGSIZE) * (i+1) + dx, (FIELDSIZE + SPACINGSIZE) * (j+1), FIELDSIZE, FIELDSIZE);
+
                     if(array[i][j] == 2){
                         gc.setFill(Color.GREEN);
                     }
@@ -126,6 +129,7 @@ public class Map {
             pawns = pawns - row;
         }
         pawnNumber = pawnNumber - pawns;
+        pawnNumber = Math.max(1, pawnNumber);
     }
     //checks of the pawn number is correct
     private boolean checkPawnNumber(){
@@ -135,10 +139,10 @@ public class Map {
             row++;
             pawns = pawns - row;
         }
-        return (pawns == 0);
+        return (pawns == 0) && (pawnNumber > 0);
     }
 
-    Map(int pawnNumber){
+    public Map(int pawnNumber){
         this.pawnNumber = pawnNumber;
         createMapArray();
     }

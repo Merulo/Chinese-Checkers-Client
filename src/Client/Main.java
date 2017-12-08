@@ -1,5 +1,7 @@
 package Client;
 
+import Client.Connection.Connection;
+import Client.Map.Map;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,7 +18,7 @@ public class Main extends Application {
         Canvas canvas = new Canvas(1024, 768);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Map map = new Map(10);
+        Map map = new Map(6);
         map.display(gc);
 
         root.getChildren().add(canvas);
@@ -27,7 +29,9 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
+        Connection connection = new Connection("localhost", 4444);
+        connection.play();
     }
 
     public static String addStrings(String a, String b){
