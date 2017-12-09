@@ -26,7 +26,7 @@ public class Main extends Application {
         messages.setPrefHeight(550);
         TextField input = new TextField();
 
-        //creates the connection on adress and ip
+        //creates the connection on address and ip
         Connection connection = new Connection("localhost", 5555);
         //starts the connection
         connection.start();
