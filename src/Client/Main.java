@@ -85,25 +85,18 @@ public class Main extends Application {
             int finalI = i;
             bEnterGame[i].setOnAction(e -> {
                 if(tNickname.getText().length()>0){
-                    String s = "JOIN;";
-                    s = s.concat(String.valueOf(finalI));
-                    String finalS = s;
-                    connection.send(finalS);
-
-
                     String k = new String("NICK;");
                     k = k.concat(tNickname.getText());
                     String finalK = k;
                     connection.send(finalK);
 
-
-                }
-                else{
                     String s = "JOIN;";
                     s = s.concat(String.valueOf(finalI));
                     String finalS = s;
                     connection.send(finalS);
 
+                }
+                else{
                     String k = new String("NICK;");
                     k = k.concat("Player");
                     Random gen = new Random();
@@ -111,6 +104,11 @@ public class Main extends Application {
                     k = k.concat(String.valueOf(tmp));
                     String finalK = k;
                     connection.send(finalK);
+
+                    String s = "JOIN;";
+                    s = s.concat(String.valueOf(finalI));
+                    String finalS = s;
+                    connection.send(finalS);
                 }
 
             });
