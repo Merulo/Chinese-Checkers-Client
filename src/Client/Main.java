@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.Random;
 
 public class Main extends Application {
 
@@ -72,14 +73,38 @@ public class Main extends Application {
 
         Label[] lGames = new Label[10];
         Button[] bEnterGame = new Button[10];
+        TextField tNickname = new TextField();
+        tNickname.setPromptText("Nickname");
         for(int i=0; i<10; i++) {
             lGames[i] = new Label("");
             bEnterGame[i] = new Button("Dołącz do gry");
             //TODO: Specify messages sending to the server.
-            String s="JOIN;";
-            s=s.concat(String.valueOf(i));
-            String finalS = s;
-            bEnterGame[i].setOnAction(e -> connection.send(finalS));
+            //String s = "JOIN;";
+            //s = s.concat(String.valueOf(i));
+            //String finalS = s;
+            int finalI = i;
+            bEnterGame[i].setOnAction(e -> {
+                if(tNickname.getText().length()>0){
+                    String s = "JOIN;";
+                    s = s.concat(String.valueOf(finalI));
+                    s = s.concat(";NICK;");
+                    s = s.concat(tNickname.getText());
+                    String finalS = s;
+                    connection.send(finalS);
+                }
+                else{
+                    String s = "JOIN;";
+                    s = s.concat(String.valueOf(finalI));
+                    s = s.concat(";NICK;");
+                    s = s.concat("Player");
+                    Random gen = new Random();
+                    int tmp  = gen.nextInt(100);
+                    s = s.concat(String.valueOf(tmp));
+                    String finalS = s;
+                    connection.send(finalS);
+                }
+
+            });
         }
 
         //Layout
@@ -98,6 +123,8 @@ public class Main extends Application {
             gridPaneHubLayout.add(lGames[i], 0, i);
             gridPaneHubLayout.add(bEnterGame[i], 1, i);
         }
+
+        gridPaneHubLayout.add(tNickname, 0, 11);
 
         //Setting a scene obect;
         hub=new Scene(gridPaneHubLayout);
