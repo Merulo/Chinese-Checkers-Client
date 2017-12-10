@@ -64,7 +64,10 @@ public class Main extends Application {
         //creates the connection on address and ip
         Connection connection = new Connection("localhost", 5555);
         //starts the connection
-        connection.start();
+        if(!connection.start()){
+            System.out.println("CANT ESTABLISH CONNECTION!");
+            //TODO: BRING UP CONNECTING MENU
+        }
 
 
         Label[] lGames = new Label[10];
@@ -73,7 +76,7 @@ public class Main extends Application {
             lGames[i] = new Label("");
             bEnterGame[i] = new Button("Dołącz do gry");
             //TODO: Specify messages sending to the server.
-            String s="!";
+            String s="JOIN;";
             s=s.concat(String.valueOf(i));
             String finalS = s;
             bEnterGame[i].setOnAction(e -> connection.send(finalS));

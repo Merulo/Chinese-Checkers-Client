@@ -36,8 +36,12 @@ public class Connection {
         out.println(message);
     }
 
-    public void start(){
+    public boolean start(){
+        if (connectionThread == null){
+            return false;
+        }
         connectionThread.start();
+        return true;
     }
 
     //TODO: ADD PROPER PARSER
@@ -56,9 +60,8 @@ public class Connection {
                         return;
                     }
                     //TODO: PARSE THE MESSAGE AND THEN DECIDE WHAT TO DO
-                    message = message + "\n";
-                    messages.appendText(message);
-                    //System.out.println(message);
+                    //messages.appendText(message);
+                    System.out.println(message);
 
                 }
             }
