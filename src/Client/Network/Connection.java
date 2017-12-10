@@ -51,13 +51,19 @@ public class Connection {
             try{
                 while (true) {
                     String message = in.readLine();
+                    if (message == null){
+                        //TODO: EXIT APPLICATION, CONNECTION LOST
+                        return;
+                    }
                     //TODO: PARSE THE MESSAGE AND THEN DECIDE WHAT TO DO
                     message = message + "\n";
                     messages.appendText(message);
+                    //System.out.println(message);
+
                 }
             }
             catch (Exception ex){
-                messages.appendText("CONNECTION CLOSED");
+                //messages.appendText("CONNECTION CLOSED");
             }
         }
 

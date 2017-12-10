@@ -24,11 +24,9 @@ public class Main extends Application {
     //TODO: CREATE IN_GAME SCENE
     //Scene in_game;
 
-    //TODO: MOVE TO LOBBY SCENE
-   // private TextArea messages = new TextArea();
-
     //TODO: ASSIGN THIS TO LOBBY SCENE
-    /*private Parent createContent(){
+    private Parent createContent(){
+        TextArea messages = new TextArea();
         messages.setPrefHeight(550);
         TextField input = new TextField();
 
@@ -55,7 +53,7 @@ public class Main extends Application {
         VBox root = new VBox(20, messages, input);
         root.setPrefSize(600, 600);
         return root;
-    }*/
+    }
 
 
 
@@ -67,6 +65,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
 
+        /*
         //lGame1.setText("text");
         Label lGame1 = new Label("Gra nr: 1\tAktywnych graczy: 4\t");
         Label lGame2 = new Label("Gra nr: 2\tAktywnych graczy: 4\t");
@@ -136,13 +135,13 @@ public class Main extends Application {
         gridPaneHubLayout.add(bGame10, 1, 9);
 
         //Setting a scene obect;
-        hub=new Scene(gridPaneHubLayout);
+        hub=new Scene(gridPaneHubLayout);*/
 
 
         //Swithing the scene: window.setScene( nazwa_sceny );
         window.setTitle("Chinese Checkers");
-        //primaryStage.setScene(new Scene(createContent()));
-        window.setScene(hub);
+        primaryStage.setScene(new Scene(createContent()));
+        //window.setScene(hub);
         window.show();
 
     }

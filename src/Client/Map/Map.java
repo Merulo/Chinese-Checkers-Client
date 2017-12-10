@@ -31,7 +31,7 @@ public class Map {
         System.out.println(rows + " " + pawnNumber);
 
         //update the size of array
-        size = rows*4 + 1;
+            size = rows*4 + 1;
 
         //create array
         array = new int[size][];
