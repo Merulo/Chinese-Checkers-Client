@@ -87,21 +87,30 @@ public class Main extends Application {
                 if(tNickname.getText().length()>0){
                     String s = "JOIN;";
                     s = s.concat(String.valueOf(finalI));
-                    s = s.concat(";NICK;");
-                    s = s.concat(tNickname.getText());
                     String finalS = s;
                     connection.send(finalS);
+
+
+                    String k = new String("NICK;");
+                    k = k.concat(tNickname.getText());
+                    String finalK = k;
+                    connection.send(finalK);
+
+
                 }
                 else{
                     String s = "JOIN;";
                     s = s.concat(String.valueOf(finalI));
-                    s = s.concat(";NICK;");
-                    s = s.concat("Player");
-                    Random gen = new Random();
-                    int tmp  = gen.nextInt(100);
-                    s = s.concat(String.valueOf(tmp));
                     String finalS = s;
                     connection.send(finalS);
+
+                    String k = new String("NICK;");
+                    k = k.concat("Player");
+                    Random gen = new Random();
+                    int tmp  = gen.nextInt(100);
+                    k = k.concat(String.valueOf(tmp));
+                    String finalK = k;
+                    connection.send(finalK);
                 }
 
             });
