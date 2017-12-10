@@ -18,15 +18,16 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    //TODO: CREATE HUB SCENE
-    //Scene hub;
-    //TODO: CREATE LOBBY SCENE
-    //Scene lobby;
-    //TODO: CREATE IN_GAME SCENE
-    //Scene in_game;
+
+    private Stage window;
+    private Scene hub;
+    //TODO: lobby Scene
+    private Scene lobby;
+    //TODO: in_game Scene
+    private Scene in_game;
 
     //TODO: ASSIGN THIS TO LOBBY SCENE
-    private Parent createContent(){
+    /*private Parent createContent(){
         TextArea messages = new TextArea();
         messages.setPrefHeight(550);
         TextField input = new TextField();
@@ -54,17 +55,16 @@ public class Main extends Application {
         VBox root = new VBox(20, messages, input);
         root.setPrefSize(600, 600);
         return root;
-    }
+    }*/
 
-
-
-    private Stage window;
-    private Scene hub;
-    private Scene lobby;
-    private Scene in_game;
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
+
+        //creates the connection on address and ip
+        Connection connection = new Connection("localhost", 5555);
+        //starts the connection
+        connection.start();
 
 
         Label[] lGames = new Label[10];
@@ -72,23 +72,10 @@ public class Main extends Application {
         for(int i=0; i<10; i++) {
             lGames[i] = new Label("Gra: "+(i+1));
             bEnterGame[i] = new Button("Dołącz do gry");
+            //TODO: Specify messages sending to the server.
+            int finalI = i+1;
+            bEnterGame[i].setOnAction(e -> connection.send(String.valueOf(finalI)));
         }
-
-
-        /*
-        //lGame1.setText("text");
-
-        //lambda expression
-        bGame1.setOnAction(e -> System.out.println("Enter the game"));
-        bGame2.setOnAction(e -> System.out.println("Enter the game"));
-        bGame3.setOnAction(e -> System.out.println("Enter the game"));
-        bGame4.setOnAction(e -> System.out.println("Enter the game"));
-        bGame5.setOnAction(e -> System.out.println("Enter the game"));
-        bGame6.setOnAction(e -> System.out.println("Enter the game"));
-        bGame7.setOnAction(e -> System.out.println("Enter the game"));
-        bGame8.setOnAction(e -> System.out.println("Enter the game"));
-        bGame9.setOnAction(e -> System.out.println("Enter the game"));
-        bGame10.setOnAction(e -> System.out.println("Enter the game"));
 
         //Layout
         //instantiatig the GridPane class*/
