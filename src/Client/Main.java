@@ -70,11 +70,13 @@ public class Main extends Application {
         Label[] lGames = new Label[10];
         Button[] bEnterGame = new Button[10];
         for(int i=0; i<10; i++) {
-            lGames[i] = new Label("Gra: "+(i+1));
+            lGames[i] = new Label("");
             bEnterGame[i] = new Button("Dołącz do gry");
             //TODO: Specify messages sending to the server.
-            int finalI = i+1;
-            bEnterGame[i].setOnAction(e -> connection.send(String.valueOf(finalI)));
+            String s="!";
+            s=s.concat(String.valueOf(i));
+            String finalS = s;
+            bEnterGame[i].setOnAction(e -> connection.send(finalS));
         }
 
         //Layout
@@ -83,7 +85,7 @@ public class Main extends Application {
         gridPaneHubLayout.setMinSize(300, 300);
         gridPaneHubLayout.setPadding(new Insets(10, 10, 10, 10));
 
-        //gridPaneHubLayout.setVgap(10);
+        gridPaneHubLayout.setVgap(10);
         //gridPaneHubLayout.setHgap(10);
 
         gridPaneHubLayout.setAlignment(Pos.TOP_LEFT);
