@@ -1,6 +1,8 @@
 package Client.Network;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
 
 import java.net.Socket;
 import java.io.BufferedReader;
@@ -49,6 +51,36 @@ public class Connection {
         this.messages = messages;
     }
 
+    //Incoming messages parser
+    public void parseMessage(String msg, Label[] lGames){
+        String[] tmp = msg.split(";");
+
+        for(int i=0; i<tmp.length; i++)
+            System.out.println(tmp[i]);
+
+        if(tmp[0].equals("GameData")){
+            if(tmp.length==6){
+                int game = Integer.parseInt(tmp[1]);
+
+                String info = new String(tmp[1]);
+                info = info.concat(" ");
+                info = info.concat(tmp[3]+"/"+tmp[4]);
+                lGames[game].setText(info);
+
+                if(tmp[5].equals("Open"))
+                    lGames[game].setTextFill(Color.GREEN);
+                else if(tmp[5].equals("Playing"))
+                    lGames[game].setTextFill(Color.RED);
+                else if(tmp[5].equals("Ready to start"))
+                    lGames[game].setTextFill(Color.YELLOW);
+                else if(tmp[5].equals("Restarting"))
+                    lGames[game].setTextFill(Color.BLUE);
+            }
+            else
+                System.out.println("Too small amount of parameters in GameData");
+        }
+    }
+
     private class ConnectionThread extends Thread{
         @Override
         public void run(){
@@ -61,7 +93,9 @@ public class Connection {
                     }
                     //TODO: PARSE THE MESSAGE AND THEN DECIDE WHAT TO DO
                     //messages.appendText(message);
-                    System.out.println(message);
+                    //System.out.println(message);
+                    //Into hub:
+                    parseMessage(message);
 
                 }
             }
