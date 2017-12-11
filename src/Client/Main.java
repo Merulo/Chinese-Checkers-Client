@@ -85,7 +85,7 @@ public class Main extends Application {
             int finalI = i;
             bEnterGame[i].setOnAction(e -> {
                 if(tNickname.getText().length()>0){
-                    String k = new String("NICK;");
+                    String k = new String("Nick;");
                     k = k.concat(tNickname.getText());
                     String finalK = k;
                     connection.send(finalK);
@@ -97,7 +97,7 @@ public class Main extends Application {
 
                 }
                 else{
-                    String k = new String("NICK;");
+                    String k = new String("Nick;");
                     k = k.concat("Player");
                     Random gen = new Random();
                     int tmp  = gen.nextInt(100);
