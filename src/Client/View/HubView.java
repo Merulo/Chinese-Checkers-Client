@@ -37,19 +37,18 @@ public class HubView implements View {
         //Incoming messages parser
         String[] tmp = message.split(";");
 
-        for(int i=0; i<tmp.length; i++)
-            System.out.println(tmp[i]);
+        //for(int i=0; i<tmp.length; i++)
+            //System.out.println(tmp[i]);
 
         if(tmp[0].equals("GameData")){
             if(tmp.length==6){
-                int game = Integer.parseInt(tmp[1])-1;
+                int game = Integer.parseInt(tmp[1]);
                 String info = new String(tmp[2]);
-                info = info.concat("\t");
+                info = info.concat("\t\t");
                 info = info.concat(tmp[3]+"/"+tmp[4]);
 
                 lGames[game].setText(info);
 
-                System.out.println("Cos");
                 if(tmp[5].equals("Open"))
                     lGames[game].setTextFill(Color.GREEN);
                 else if(tmp[5].equals("Playing"))
@@ -62,7 +61,7 @@ public class HubView implements View {
             else
                 System.out.println("Too small amount of parameters in GameData");
         }
-        System.out.println("TEST2 " + message);
+        //System.out.println("TEST2 " + message);
     }
     @Override
     public Scene getScene(){
