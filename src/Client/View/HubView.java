@@ -23,6 +23,10 @@ public class HubView implements View {
 
     public HubView(Connection connection){
         this.connection = connection;
+        for(int i=0; i<10; i++) {
+            lGames[i] = new Label("");
+            bEnterGame[i] = new Button("Dołącz do gry");
+        }
     }
 
 
@@ -42,7 +46,9 @@ public class HubView implements View {
                 String info = new String(tmp[1]);
                 info = info.concat(" ");
                 info = info.concat(tmp[3]+"/"+tmp[4]);
+
                 lGames[game].setText(info);
+
                 if(tmp[5].equals("Open"))
                     lGames[game].setTextFill(Color.GREEN);
                 else if(tmp[5].equals("Playing"))
@@ -55,15 +61,13 @@ public class HubView implements View {
             else
                 System.out.println("Too small amount of parameters in GameData");
         }
-        //System.out.println("TEST2 " + message);
+        System.out.println("TEST2 " + message);
     }
     @Override
     public Scene getScene(){
 
         tNickname.setPromptText("Nickname");
         for(int i=0; i<10; i++) {
-            lGames[i] = new Label("");
-            bEnterGame[i] = new Button("Dołącz do gry");
             //TODO: Specify messages sending to the server.
             //String s = "JOIN;";
             //s = s.concat(String.valueOf(i));
