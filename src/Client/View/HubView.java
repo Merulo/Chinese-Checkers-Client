@@ -40,8 +40,8 @@ public class HubView implements View {
         //Incoming messages parser
         String[] tmp = message.split(";");
 
-        for(int i=0; i<tmp.length; i++)
-            System.out.println(tmp[i]);
+        //for(int i=0; i<tmp.length; i++)
+           // System.out.println(tmp[i]);
 
         if(tmp[0].equals("GameData")){
             if(tmp.length==6){
@@ -86,6 +86,7 @@ public class HubView implements View {
             };
             //run the javafx-friendly thread
             task.run();
+            next.parse(message);
 
         }
         //System.out.println("TEST2 " + message);

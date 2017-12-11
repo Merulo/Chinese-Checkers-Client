@@ -1,15 +1,17 @@
 package Client.View;
 
 import Client.Network.Connection;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.Random;
 
@@ -17,11 +19,14 @@ public class LobbyView implements View {
 
     private Scene lobby;
     private Connection connection;
+    private int playerCount = 0;
 
     Label[] lPlayers = new Label[6];
     Label lGameName = new Label("");
     TextField tChat = new TextField();
     TextArea tChatShow = new TextArea();
+
+
 
     public LobbyView(Connection connection){
         this.connection = connection;
@@ -33,10 +38,16 @@ public class LobbyView implements View {
 
     @Override
     public void parse(String message){
-
-        //Incoming messages parser
         String[] tmp = message.split(";");
-        lGameName.setText("Gra: 0");
+        if(tmp[0].equals("GameDetailedData")){
+            parseGameData(tmp);
+
+        }
+        else if(tmp[0].equals("PlayerList")){
+            System.out.println("New message");
+            parsePlayerList(tmp);
+        }
+
     }
     @Override
     public Scene getScene(){
@@ -68,6 +79,43 @@ public class LobbyView implements View {
         lobby=new Scene(gridPaneHubLayout);
         return lobby;
     }
+
+    private void parseGameData(String[] data){
+        lGameName.setText(data[1]);
+    }
+
+    private void parsePlayerList(String[] data) {
+        try {
+            System.out.println("New message:" + lPlayers[playerCount].getText());
+            double r = Double.parseDouble(data[2]);
+            double g = Double.parseDouble(data[3]);
+            double b = Double.parseDouble(data[4]);
+            setTextOnJavaFX(lPlayers[playerCount], data[1], new Color(r, g, b, 0.5));
+            playerCount++;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //example method to be javafx-friendly
+    void setTextOnJavaFX(Labeled labeled, String value, Color color) {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        labeled.setText(value);
+                        labeled.setTextFill(color);
+                    }
+                });
+                return null;
+            }
+        };
+        task.run();
+    }
+
+
 
 
 }
