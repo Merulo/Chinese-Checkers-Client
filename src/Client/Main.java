@@ -1,6 +1,8 @@
 package Client;
 
 import Client.Network.Connection;
+import Client.View.HubView;
+import Client.View.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -21,7 +23,6 @@ public class Main extends Application {
 
 
     private Stage window;
-    private Scene hub;
     //TODO: lobby Scene
     private Scene lobby;
     //TODO: in_game Scene
@@ -58,12 +59,17 @@ public class Main extends Application {
         return root;
     }*/
 
+    View curret;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
 
         //creates the connection on address and ip
         Connection connection = new Connection("localhost", 5555);
+        curret = new HubView(connection);
+        connection.setView(curret);
+
         //starts the connection
         if(!connection.start()){
             System.out.println("CANT ESTABLISH CONNECTION!");
@@ -71,76 +77,14 @@ public class Main extends Application {
         }
 
 
-        Label[] lGames = new Label[10];
-        Button[] bEnterGame = new Button[10];
-        TextField tNickname = new TextField();
-        tNickname.setPromptText("Nickname");
-        for(int i=0; i<10; i++) {
-            lGames[i] = new Label("");
-            bEnterGame[i] = new Button("Dołącz do gry");
-            //TODO: Specify messages sending to the server.
-            //String s = "JOIN;";
-            //s = s.concat(String.valueOf(i));
-            //String finalS = s;
-            int finalI = i;
-            bEnterGame[i].setOnAction(e -> {
-                if(tNickname.getText().length()>0){
-                    String k = new String("Nick;");
-                    k = k.concat(tNickname.getText());
-                    String finalK = k;
-                    connection.send(finalK);
 
-                    String s = "JOIN;";
-                    s = s.concat(String.valueOf(finalI));
-                    String finalS = s;
-                    connection.send(finalS);
 
-                }
-                else{
-                    String k = new String("Nick;");
-                    k = k.concat("Player");
-                    Random gen = new Random();
-                    int tmp  = gen.nextInt(100);
-                    k = k.concat(String.valueOf(tmp));
-                    String finalK = k;
-                    connection.send(finalK);
-
-                    String s = "JOIN;";
-                    s = s.concat(String.valueOf(finalI));
-                    String finalS = s;
-                    connection.send(finalS);
-                }
-
-            });
-        }
-
-        //Layout
-        //instantiatig the GridPane class*/
-        GridPane gridPaneHubLayout = new GridPane();
-        gridPaneHubLayout.setMinSize(300, 300);
-        gridPaneHubLayout.setPadding(new Insets(10, 10, 10, 10));
-
-        gridPaneHubLayout.setVgap(10);
-        //gridPaneHubLayout.setHgap(10);
-
-        gridPaneHubLayout.setAlignment(Pos.TOP_LEFT);
-
-        //Setting nodes
-        for(int i=0; i<10; i++) {
-            gridPaneHubLayout.add(lGames[i], 0, i);
-            gridPaneHubLayout.add(bEnterGame[i], 1, i);
-        }
-
-        gridPaneHubLayout.add(tNickname, 0, 11);
-
-        //Setting a scene obect;
-        hub=new Scene(gridPaneHubLayout);
 
 
         //Swithing the scene: window.setScene( nazwa_sceny );
         window.setTitle("Chinese Checkers");
         //primaryStage.setScene(new Scene(createContent()));
-        window.setScene(hub);
+        window.setScene(curret.getScene());
         window.show();
 
     }

@@ -1,5 +1,6 @@
 package Client.Network;
 
+import Client.View.View;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
@@ -17,6 +18,8 @@ public class Connection {
     private PrintWriter out;
     //reading thread
     private ConnectionThread connectionThread;
+
+    View current;
 
     //TODO: REPLACE WITH PROPER PARSER
     TextArea messages;
@@ -50,7 +53,7 @@ public class Connection {
     public void addMessageParser(TextArea messages){
         this.messages = messages;
     }
-
+/*
     //Incoming messages parser
     public void parseMessage(String msg, Label[] lGames){
         String[] tmp = msg.split(";");
@@ -80,6 +83,10 @@ public class Connection {
                 System.out.println("Too small amount of parameters in GameData");
         }
     }
+*/
+    public void setView(View view){
+        current = view;
+    }
 
     private class ConnectionThread extends Thread{
         @Override
@@ -93,14 +100,21 @@ public class Connection {
                     }
                     //TODO: PARSE THE MESSAGE AND THEN DECIDE WHAT TO DO
                     //messages.appendText(message);
-                    //System.out.println(message);
+                    System.out.println("TEST " + message);
+                    if(current != null) {
+                        current.parse(message);
+                    }
+
                     //Into hub:
-                    parseMessage(message);
+                    //parseMessage(message);
+                    //if(current != null) {
+
+                    //}
 
                 }
             }
             catch (Exception ex){
-                //messages.appendText("CONNECTION CLOSED");
+                messages.appendText("CONNECTION CLOSED");
             }
         }
 
