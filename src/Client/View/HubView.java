@@ -1,14 +1,18 @@
 package Client.View;
 
 import Client.Network.Connection;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.util.Random;
 
@@ -33,7 +37,6 @@ public class HubView implements View {
 
     @Override
     public void parse(String message){
-
         //Incoming messages parser
         String[] tmp = message.split(";");
 
@@ -61,6 +64,30 @@ public class HubView implements View {
             else
                 System.out.println("Too small amount of parameters in GameData");
         }
+        else if(tmp[0].equals("GameDetailedData")){
+            //TODO: CLEAR IT A BIT
+            //TODO: CONSIDER MOVING IT TO DIFFERENT METHOD
+            //get the current stage that we are in
+            Stage stageTheLabelBelongs = (Stage) tNickname.getScene().getWindow();
+            //create new view and prepare connection
+            View next = new LobbyView(connection);
+            connection.setView(next);
+
+            //crate javafx-friendly thread which will call the change
+            Task<Void> task = new Task<Void>() {
+                @Override protected Void call() throws Exception {
+                        Platform.runLater(new Runnable() {
+                            @Override public void run() {
+                                stageTheLabelBelongs.setScene(next.getScene());
+                            }
+                        });
+                    return null;
+                }
+            };
+            //run the javafx-friendly thread
+            task.run();
+
+        }
         //System.out.println("TEST2 " + message);
     }
     @Override
@@ -80,7 +107,7 @@ public class HubView implements View {
                     String finalK = k;
                     connection.send(finalK);
 
-                    String s = "JOIN;";
+                    String s = "Join;";
                     s = s.concat(String.valueOf(finalI));
                     String finalS = s;
                     connection.send(finalS);
@@ -95,7 +122,7 @@ public class HubView implements View {
                     String finalK = k;
                     connection.send(finalK);
 
-                    String s = "JOIN;";
+                    String s = "Join;";
                     s = s.concat(String.valueOf(finalI));
                     String finalS = s;
                     connection.send(finalS);

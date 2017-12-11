@@ -68,8 +68,8 @@ public class Main extends Application {
 
         //creates the connection on address and ip
         Connection connection = new Connection("localhost", 5555);
-        //curret = new HubView(connection);
-        curret = new LobbyView(connection);
+        curret = new HubView(connection);
+        //curret = new LobbyView(connection);
         connection.setView(curret);
 
         //starts the connection
