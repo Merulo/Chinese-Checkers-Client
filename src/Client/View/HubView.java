@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 import java.util.Random;
 
@@ -16,20 +17,49 @@ public class HubView implements View {
     private Scene hub;
     private Connection connection;
 
+    Label[] lGames = new Label[10];
+    Button[] bEnterGame = new Button[10];
+    TextField tNickname = new TextField();
+
     public HubView(Connection connection){
         this.connection = connection;
     }
 
+
+
     @Override
     public void parse(String message){
-        System.out.println("TEST2 " + message);
+
+        //Incoming messages parser
+        String[] tmp = message.split(";");
+
+        for(int i=0; i<tmp.length; i++)
+            System.out.println(tmp[i]);
+
+        if(tmp[0].equals("GameData")){
+            if(tmp.length==6){
+                int game = Integer.parseInt(tmp[1]);
+                String info = new String(tmp[1]);
+                info = info.concat(" ");
+                info = info.concat(tmp[3]+"/"+tmp[4]);
+                lGames[game].setText(info);
+                if(tmp[5].equals("Open"))
+                    lGames[game].setTextFill(Color.GREEN);
+                else if(tmp[5].equals("Playing"))
+                    lGames[game].setTextFill(Color.RED);
+                else if(tmp[5].equals("Ready to start"))
+                    lGames[game].setTextFill(Color.YELLOW);
+                else if(tmp[5].equals("Restarting"))
+                    lGames[game].setTextFill(Color.BLUE);
+            }
+            else
+                System.out.println("Too small amount of parameters in GameData");
+        }
+        //System.out.println("TEST2 " + message);
     }
     @Override
     public Scene getScene(){
 
-        Label[] lGames = new Label[10];
-        Button[] bEnterGame = new Button[10];
-        TextField tNickname = new TextField();
         tNickname.setPromptText("Nickname");
         for(int i=0; i<10; i++) {
             lGames[i] = new Label("");

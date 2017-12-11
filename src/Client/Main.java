@@ -66,7 +66,7 @@ public class Main extends Application {
         window = primaryStage;
 
         //creates the connection on address and ip
-        Connection connection = new Connection("localhost", 5555);
+        Connection connection = new Connection("localhost", 5556);
         curret = new HubView(connection);
         connection.setView(curret);
 
