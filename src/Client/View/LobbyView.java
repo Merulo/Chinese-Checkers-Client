@@ -28,6 +28,7 @@ public class LobbyView implements View {
     ChoiceBox<String> choiceBox = new ChoiceBox<>();
     Label lChoice = new Label("Ilość graczy: ");
     Button bStart = new Button("Start");
+    Button bLeave = new Button("Wyjdź");
 
 
     public LobbyView(Connection connection){
@@ -79,6 +80,16 @@ public class LobbyView implements View {
             }
         });
 
+        bLeave.setOnAction(e -> {
+            String message="Leave;";
+            try{
+                connection.send(message);
+            }
+            catch(Exception ex){
+
+            }
+        });
+
         //Layout
         //instantiatig the GridPane class*/
         GridPane gridPaneHubLayout = new GridPane();
@@ -101,6 +112,7 @@ public class LobbyView implements View {
         gridPaneHubLayout.add(lChoice, 1, 1);
         gridPaneHubLayout.add(choiceBox, 2, 1);
         gridPaneHubLayout.add(bStart, 2, 7);
+        gridPaneHubLayout.add(bLeave, 1, 7);
 
         //Setting a scene obect;
         lobby=new Scene(gridPaneHubLayout);
