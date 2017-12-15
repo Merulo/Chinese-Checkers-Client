@@ -67,7 +67,6 @@ public class LobbyView implements View {
 
 
         choiceBox.getItems().addAll("2", "3", "4", "6");
-        choiceBox.setValue("2");
 
         bStart.setOnAction(e -> {
             String message="Players;";
@@ -110,6 +109,7 @@ public class LobbyView implements View {
 
     private void parseGameData(String[] data){
         lGameName.setText(data[1]);
+        choiceBox.setValue(data[3]);
     }
 
     private void parsePlayerList(String[] data) {
