@@ -25,7 +25,9 @@ public class LobbyView implements View {
     Label lGameName = new Label("");
     TextField tChat = new TextField();
     TextArea tChatShow = new TextArea();
-
+    ChoiceBox<String> choiceBox = new ChoiceBox<>();
+    Label lChoice = new Label("Ilość graczy: ");
+    Button bStart = new Button("Start");
 
 
     public LobbyView(Connection connection){
@@ -33,8 +35,6 @@ public class LobbyView implements View {
         for(int i=0; i<6; i++)
             lPlayers[i] = new Label("");
     }
-
-
 
     @Override
     public void parse(String message){
@@ -47,13 +47,38 @@ public class LobbyView implements View {
             System.out.println("New message");
             parsePlayerList(tmp);
         }
-
     }
     @Override
     public Scene getScene(){
 
         tChat.setPromptText("Write...");
             //TODO: Specify messages sending to the server.
+        tChat.setOnAction(e ->{
+            String message = "Msg;";
+            message=message.concat(tChat.getText());
+            tChat.clear();
+            try {
+                connection.send(message);
+            }
+            catch (Exception ex){
+
+            }
+        });
+
+
+        choiceBox.getItems().addAll("2", "3", "4", "6");
+        choiceBox.setValue("2");
+
+        bStart.setOnAction(e -> {
+            String message="Players;";
+            message=message.concat(choiceBox.getValue());
+            try{
+                connection.send(message);
+            }
+            catch(Exception ex){
+
+            }
+        });
 
         //Layout
         //instantiatig the GridPane class*/
@@ -74,6 +99,9 @@ public class LobbyView implements View {
         gridPaneHubLayout.add(lGameName, 1, 0);
         gridPaneHubLayout.add(tChatShow, 0, 6);
         gridPaneHubLayout.add(tChat, 0, 7);
+        gridPaneHubLayout.add(lChoice, 1, 1);
+        gridPaneHubLayout.add(choiceBox, 2, 1);
+        gridPaneHubLayout.add(bStart, 2, 7);
 
         //Setting a scene obect;
         lobby=new Scene(gridPaneHubLayout);

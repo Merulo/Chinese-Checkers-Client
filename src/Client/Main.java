@@ -19,6 +19,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.util.Random;
+import javafx.stage.WindowEvent;
+import javafx.event.EventHandler;
 
 public class Main extends Application {
 
@@ -89,6 +91,13 @@ public class Main extends Application {
         window.setScene(curret.getScene());
         window.show();
 
+        window.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                System.out.println("Stage is closing");
+                System.exit(0);
+
+            }
+        });
     }
 
     public static void main(String[] args) {
