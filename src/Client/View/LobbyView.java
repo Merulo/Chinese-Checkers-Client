@@ -48,6 +48,21 @@ public class LobbyView implements View {
             System.out.println("New message");
             parsePlayerList(tmp);
         }
+        else if(tmp[0].equals("Remove")){
+            String t=tmp[1];
+            int i=0;
+            while(!lPlayers[i].equals(t)){
+                i++;
+            }
+            i++;
+            if(i<6 && lPlayers[i].equals(t)){
+                while(i<5){
+                    lPlayers[i]=lPlayers[i+1];
+                    i++;
+                }
+                lPlayers[5].setText("");
+            }
+        }
     }
     @Override
     public Scene getScene(){
