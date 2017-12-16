@@ -27,6 +27,8 @@ public class LobbyView implements View {
     TextArea tChatShow = new TextArea();
     ChoiceBox<String> choiceBox = new ChoiceBox<>();
     Label lChoice = new Label("Ilość graczy: ");
+    TextField tSize = new TextField();
+    Label lSize = new Label("Wielkosć planszy: ");
     Button bStart = new Button("Start");
     Button bLeave = new Button("Wyjdź");
 
@@ -93,8 +95,7 @@ public class LobbyView implements View {
         choiceBox.getItems().addAll("2", "3", "4", "6");
 
         bStart.setOnAction(e -> {
-            String message="Players;";
-            message=message.concat(choiceBox.getValue());
+            String message="Start;";
             try{
                 connection.send(message);
             }
@@ -105,6 +106,28 @@ public class LobbyView implements View {
 
         bLeave.setOnAction(e -> {
             String message="Leave;";
+            try{
+                connection.send(message);
+            }
+            catch(Exception ex){
+
+            }
+        });
+
+        choiceBox.setOnAction(e ->{
+            String message="Settings;Players;";
+            message = message.concat(choiceBox.getValue());
+            try{
+                connection.send(message);
+            }
+            catch(Exception ex){
+
+            }
+        });
+
+        tSize.setOnAction(e ->{
+            String message="Settings;Size;";
+            message = message.concat(tSize.getText());
             try{
                 connection.send(message);
             }
@@ -124,6 +147,7 @@ public class LobbyView implements View {
 
         gridPaneHubLayout.setAlignment(Pos.TOP_LEFT);
 
+        tSize.setMaxWidth(40);
         //Setting nodes
         for(int i=0; i<6; i++) {
             gridPaneHubLayout.add(lPlayers[i], 0, i);
@@ -136,6 +160,8 @@ public class LobbyView implements View {
         gridPaneHubLayout.add(choiceBox, 2, 1);
         gridPaneHubLayout.add(bStart, 2, 7);
         gridPaneHubLayout.add(bLeave, 1, 7);
+        gridPaneHubLayout.add(lSize, 1, 2);
+        gridPaneHubLayout.add(tSize, 2, 2);
 
         //Setting a scene obect;
         lobby=new Scene(gridPaneHubLayout);
