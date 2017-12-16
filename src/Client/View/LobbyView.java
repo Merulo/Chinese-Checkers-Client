@@ -61,8 +61,8 @@ public class LobbyView implements View {
                 if(lPlayers[i].getText().equals(t))
                     k=i;
             }
-            if(k>=0) {
-                if (k < 6 && lPlayers[k].equals(t)) {
+            if(k>0) {
+                if (k < 5 && lPlayers[k].getText().equals(t)) {
                     while (k < 5) {
                         lPlayers[k].setText(lPlayers[k + 1].getText());
                         k++;
@@ -77,7 +77,7 @@ public class LobbyView implements View {
             else
                 tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
         }
-        else if(tmp[0].equals("Size")){
+        /*else if(tmp[0].equals("Size")){
             usersSettings = FALSE;
             tSize.setText(tmp[1]);
             usersSettings = TRUE;
@@ -86,7 +86,7 @@ public class LobbyView implements View {
             usersSettings = FALSE;
             choiceBox.setValue(tmp[1]);
             usersSettings = TRUE;
-        }
+        }*/
     }
     @Override
     public Scene getScene(){
