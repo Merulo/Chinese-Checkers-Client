@@ -15,11 +15,15 @@ import javafx.scene.paint.Paint;
 
 import java.util.Random;
 
+import static java.lang.Boolean.TRUE;
+import static java.lang.Boolean.FALSE;
+
 public class LobbyView implements View {
 
     private Scene lobby;
     private Connection connection;
     private int playerCount = 0;
+    private boolean usersSettings = TRUE;
 
     Label[] lPlayers = new Label[6];
     Label lGameName = new Label("");
@@ -43,8 +47,8 @@ public class LobbyView implements View {
     public void parse(String message){
         String[] tmp = message.split(";");
         if(tmp[0].equals("GameDetailedData")){
+            usersSettings = FALSE;
             parseGameData(tmp);
-
         }
         else if(tmp[0].equals("PlayerList")){
             System.out.println("New message");
@@ -72,6 +76,12 @@ public class LobbyView implements View {
                 tChatShow.setText(tmp[1]+"\n");
             else
                 tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
+        }
+        else if(tmp[0].equals("Size")){
+            tSize.setText(tmp[1]);
+        }
+        else if(tmp[0].equals("Players")){
+            choiceBox.setValue(tmp[1]);
         }
     }
     @Override
@@ -104,6 +114,7 @@ public class LobbyView implements View {
             }
         });
 
+        //TODO: goint back to hub
         bLeave.setOnAction(e -> {
             String message="Leave;";
             try{
@@ -115,24 +126,26 @@ public class LobbyView implements View {
         });
 
         choiceBox.setOnAction(e ->{
-            String message="Settings;Players;";
-            message = message.concat(choiceBox.getValue());
-            try{
-                connection.send(message);
-            }
-            catch(Exception ex){
+            if(usersSettings) {
+                String message = "Settings;Players;";
+                message = message.concat(choiceBox.getValue());
+                try {
+                    connection.send(message);
+                } catch (Exception ex) {
 
+                }
             }
         });
 
         tSize.setOnAction(e ->{
-            String message="Settings;Size;";
-            message = message.concat(tSize.getText());
-            try{
-                connection.send(message);
-            }
-            catch(Exception ex){
+            if(usersSettings) {
+                String message = "Settings;Size;";
+                message = message.concat(tSize.getText());
+                try {
+                    connection.send(message);
+                } catch (Exception ex) {
 
+                }
             }
         });
 
@@ -169,8 +182,13 @@ public class LobbyView implements View {
     }
 
     private void parseGameData(String[] data){
-        lGameName.setText(data[1]);
-        choiceBox.setValue(data[3]);
+        //if(lGameName.getText().equals(data[1]))
+            lGameName.setText(data[1]);
+        //if(choiceBox.getValue().equals(data[3]))
+            choiceBox.setValue(data[3]);
+        //if(tSize.getText().equals(data[4]))
+            tSize.setText(data[4]);
+        usersSettings = TRUE;
     }
 
     private void parsePlayerList(String[] data) {

@@ -60,6 +60,8 @@ public class HubView implements View {
                     lGames[game].setTextFill(Color.YELLOW);
                 else if(tmp[5].equals("Restarting"))
                     lGames[game].setTextFill(Color.BLUE);
+                else if(tmp[5].equals("Full"))
+                    lGames[game].setTextFill(Color.ORANGE);
             }
             else
                 System.out.println("Too small amount of parameters in GameData");
