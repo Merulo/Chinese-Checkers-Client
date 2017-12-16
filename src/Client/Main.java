@@ -93,6 +93,7 @@ public class Main extends Application {
 
         window.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
+                connection.send("Leave");
                 System.out.println("Stage is closing");
                 System.exit(0);
 
