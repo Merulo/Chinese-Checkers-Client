@@ -74,18 +74,10 @@ public class HubView implements View {
             connection.setView(next);
 
             //crate javafx-friendly thread which will call the change
-            Task<Void> task = new Task<Void>() {
-                @Override protected Void call() throws Exception {
-                        Platform.runLater(new Runnable() {
-                            @Override public void run() {
-                                stageTheLabelBelongs.setScene(next.getScene());
-                            }
-                        });
-                    return null;
-                }
-            };
+
+            stageTheLabelBelongs.setScene(next.getScene());
             //run the javafx-friendly thread
-            task.run();
+            //task.run();
             next.parse(message);
 
         }

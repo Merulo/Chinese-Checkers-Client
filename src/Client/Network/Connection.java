@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import javafx.application.Platform;
 
 public class Connection {
     //socket
@@ -70,10 +71,17 @@ public class Connection {
                     }
                     //TODO: PARSE THE MESSAGE AND THEN DECIDE WHAT TO DO
                     //messages.appendText(message);
-                    //System.out.println("TEST " + message);
-                    if(current != null) {
-                        current.parse(message);
-                    }
+                    System.out.println("GOT MESSAGE: " + message);
+
+                    Platform.runLater(new Runnable() {
+                        @Override public void run() {
+                            if(current != null) {
+                                current.parse(message);
+                            }
+                        }
+                    });
+
+
 
                     //Into hub:
                     //parseMessage(message);
@@ -84,8 +92,8 @@ public class Connection {
                 }
             }
             catch (Exception ex){
-                messages.appendText("CONNECTION CLOSED");
                 System.out.println("Blad polaczenia");
+                ex.printStackTrace();
             }
         }
 

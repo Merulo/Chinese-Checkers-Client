@@ -147,30 +147,16 @@ public class LobbyView implements View {
             double r = Double.parseDouble(data[2]);
             double g = Double.parseDouble(data[3]);
             double b = Double.parseDouble(data[4]);
-            setTextOnJavaFX(lPlayers[playerCount], data[1], new Color(r, g, b, 0.5));
+
+            lPlayers[playerCount].setText(data[1]);
+            lPlayers[playerCount].setTextFill(new Color(r, g, b, 0.5));
+
             playerCount++;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    //example method to be javafx-friendly
-    void setTextOnJavaFX(Labeled labeled, String value, Color color) {
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        labeled.setText(value);
-                        labeled.setTextFill(color);
-                    }
-                });
-                return null;
-            }
-        };
-        task.run();
-    }
 
 
 

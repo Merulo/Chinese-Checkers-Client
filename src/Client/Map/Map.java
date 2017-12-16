@@ -92,6 +92,7 @@ public class Map {
                 }
             }
         }
+        draw2Dmap(gc);
     }
     //draws the array w/o shifting
     public void draw2Dmap(GraphicsContext gc){
