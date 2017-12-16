@@ -65,6 +65,12 @@ public class LobbyView implements View {
                 }
             }
         }
+        else if(tmp[0].equals("Msg")){
+            if(tChatShow.getText().equals(""))
+                tChatShow.setText(tmp[1]+"\n");
+            else
+                tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
+        }
     }
     @Override
     public Scene getScene(){
