@@ -78,10 +78,14 @@ public class LobbyView implements View {
                 tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
         }
         else if(tmp[0].equals("Size")){
+            usersSettings = FALSE;
             tSize.setText(tmp[1]);
+            usersSettings = TRUE;
         }
         else if(tmp[0].equals("Players")){
+            usersSettings = FALSE;
             choiceBox.setValue(tmp[1]);
+            usersSettings = TRUE;
         }
     }
     @Override
