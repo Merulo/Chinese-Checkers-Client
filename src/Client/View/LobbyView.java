@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 
 import java.util.Random;
 
@@ -24,6 +25,10 @@ public class LobbyView implements View {
     private Connection connection;
     private int playerCount = 0;
     private boolean usersSettings = TRUE;
+    private boolean master = FALSE;
+
+
+    GridPane gridPaneHubLayout = new GridPane();
 
     Label[] lPlayers = new Label[6];
     Label lGameName = new Label("");
@@ -35,6 +40,7 @@ public class LobbyView implements View {
     Label lSize = new Label("Wielkosć planszy: ");
     Button bStart = new Button("Start");
     Button bLeave = new Button("Wyjdź");
+    Label lKick = new Label ("Kick");
 
 
     public LobbyView(Connection connection){
@@ -58,10 +64,12 @@ public class LobbyView implements View {
             String t=tmp[1];
             int k=-1;
             for(int i=0; i<6; i++){
-                if(lPlayers[i].getText().equals(t))
-                    k=i;
+                if(lPlayers[i].getText().equals(t)) {
+                    k = i;
+                    playerCount--;
+                }
             }
-            if(k>0) {
+            if(k>=0) {
                 if (k < 5 && lPlayers[k].getText().equals(t)) {
                     while (k < 5) {
                         lPlayers[k].setText(lPlayers[k + 1].getText());
@@ -122,6 +130,18 @@ public class LobbyView implements View {
         bLeave.setOnAction(e -> {
             String message="Leave;";
             try{
+                //connection.send(message);
+                Stage stageTheLabelBelongs = (Stage) lGameName.getScene().getWindow();
+                //create new view and prepare connection
+                View next = new HubView(this.connection);
+                connection.setView(next);
+
+                //crate javafx-friendly thread which will call the change
+
+                stageTheLabelBelongs.setScene(next.getScene());
+                //run the javafx-friendly thread
+                //task.run();
+                next.parse(message);
                 connection.send(message);
             }
             catch(Exception ex){
@@ -155,7 +175,7 @@ public class LobbyView implements View {
 
         //Layout
         //instantiatig the GridPane class*/
-        GridPane gridPaneHubLayout = new GridPane();
+        //GridPane gridPaneHubLayout = new GridPane();
         gridPaneHubLayout.setMinSize(300, 300);
         gridPaneHubLayout.setPadding(new Insets(10, 10, 10, 10));
 
@@ -180,6 +200,7 @@ public class LobbyView implements View {
         gridPaneHubLayout.add(lSize, 1, 2);
         gridPaneHubLayout.add(tSize, 2, 2);
 
+
         //Setting a scene obect;
         lobby=new Scene(gridPaneHubLayout);
         return lobby;
@@ -193,6 +214,9 @@ public class LobbyView implements View {
         //if(tSize.getText().equals(data[4]))
             tSize.setText(data[4]);
         usersSettings = TRUE;
+            if(data[2].equals("0"))
+                gridPaneHubLayout.add(lKick, 1, 3);
+
     }
 
     private void parsePlayerList(String[] data) {
@@ -210,7 +234,6 @@ public class LobbyView implements View {
             e.printStackTrace();
         }
     }
-
 
 
 
