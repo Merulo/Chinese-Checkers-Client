@@ -2,6 +2,8 @@ package Client.View;
 
 import Client.Network.Connection;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -31,6 +33,7 @@ public class LobbyView implements View {
     GridPane gridPaneHubLayout = new GridPane();
 
     Label[] lPlayers = new Label[6];
+    Label[] lNumbers = new Label[6];
     Label lGameName = new Label("");
     TextField tChat = new TextField();
     TextArea tChatShow = new TextArea();
@@ -40,13 +43,43 @@ public class LobbyView implements View {
     Label lSize = new Label("Wielkosć planszy: ");
     Button bStart = new Button("Start");
     Button bLeave = new Button("Wyjdź");
-    Label lKick = new Label ("Kick");
+    Button bKick = new Button ("Wyrzuć");
+    ChoiceBox<String> cKick = new ChoiceBox<>();
+    CheckBox[] cRules = new CheckBox[3];
+    Button bAddBot = new Button("Dodaj bota");
 
 
     public LobbyView(Connection connection){
         this.connection = connection;
-        for(int i=0; i<6; i++)
+        for(int i=0; i<6; i++) {
             lPlayers[i] = new Label("");
+            lNumbers[i] = new Label(String.valueOf(i+1));
+        }
+
+        cRules[0] = new CheckBox("Ruch na jedno pole obok");
+        cRules[1] = new CheckBox("Przeskoczenie jednego, dowolnego pionka");
+        cRules[2] = new CheckBox("Przeskoczenie dwoch pustych pol");
+
+        for(int i=0; i<3; i++) {
+            int finalI = i;
+            cRules[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (cRules[finalI].isSelected()) {
+                        String msg = "RuleOn;";
+                        msg += finalI;
+                        connection.send(msg);
+                        System.out.println(msg);
+                    } else {
+                        String msg = "RuleOff;";
+                        //msg = msg.concat(i);
+                        msg += finalI;
+                        connection.send(msg);
+                        System.out.println(msg);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -117,12 +150,23 @@ public class LobbyView implements View {
         choiceBox.getItems().addAll("2", "3", "4", "6");
 
         bStart.setOnAction(e -> {
-            String message="Start;";
-            try{
-                connection.send(message);
-            }
-            catch(Exception ex){
+            if(bStart.getText().equals("Start")) {
+                String message = "Ready;";
+                bStart.setText("Anuluj");
+                try {
+                    connection.send(message);
+                } catch (Exception ex) {
 
+                }
+            }
+            else if(bStart.getText().equals("Anuluj")) {
+                String message = "Cancel;";
+                bStart.setText("Start");
+                try {
+                    connection.send(message);
+                } catch (Exception ex) {
+
+                }
             }
         });
 
@@ -173,6 +217,26 @@ public class LobbyView implements View {
             }
         });
 
+        bKick.setOnAction(e ->{
+            String message = "Kick;";
+            message = message.concat(cKick.getValue());
+            System.out.println(message);
+            try {
+                connection.send(message);
+            } catch (Exception ex) {
+
+            }
+        });
+
+        bAddBot.setOnAction(e ->{
+            String message = "AddBot;";
+            try {
+                connection.send(message);
+            } catch (Exception ex) {
+
+            }
+        });
+
         //Layout
         //instantiatig the GridPane class*/
         //GridPane gridPaneHubLayout = new GridPane();
@@ -187,18 +251,22 @@ public class LobbyView implements View {
         tSize.setMaxWidth(40);
         //Setting nodes
         for(int i=0; i<6; i++) {
-            gridPaneHubLayout.add(lPlayers[i], 0, i);
+            gridPaneHubLayout.add(lNumbers[i], 0, i);
+            gridPaneHubLayout.add(lPlayers[i], 1, i);
         }
 
-        gridPaneHubLayout.add(lGameName, 1, 0);
-        gridPaneHubLayout.add(tChatShow, 0, 6);
-        gridPaneHubLayout.add(tChat, 0, 7);
-        gridPaneHubLayout.add(lChoice, 1, 1);
-        gridPaneHubLayout.add(choiceBox, 2, 1);
-        gridPaneHubLayout.add(bStart, 2, 7);
-        gridPaneHubLayout.add(bLeave, 1, 7);
-        gridPaneHubLayout.add(lSize, 1, 2);
-        gridPaneHubLayout.add(tSize, 2, 2);
+        gridPaneHubLayout.add(lGameName, 2, 0);
+        gridPaneHubLayout.add(tChatShow, 1, 7);
+        gridPaneHubLayout.add(tChat, 1, 8);
+        gridPaneHubLayout.add(lChoice, 2, 1);
+        gridPaneHubLayout.add(choiceBox, 3, 1);
+        gridPaneHubLayout.add(bStart, 3, 0);
+        gridPaneHubLayout.add(bLeave, 3, 8);
+        gridPaneHubLayout.add(lSize, 2, 2);
+        gridPaneHubLayout.add(tSize, 3, 2);
+        gridPaneHubLayout.add(bAddBot, 3, 7);
+        for(int i=0; i<3; i++)
+            gridPaneHubLayout.add(cRules[i], 2, i+4);
 
 
         //Setting a scene obect;
@@ -213,9 +281,38 @@ public class LobbyView implements View {
             choiceBox.setValue(data[3]);
         //if(tSize.getText().equals(data[4]))
             tSize.setText(data[4]);
+            boolean on = FALSE;
+            boolean off = FALSE;
+            for(int i=5; i<12; i++){
+                if(data[i].equals("RuleOn"))
+                    on = TRUE;
+                else if(data[i].equals("RuleOff")) {
+                    off = TRUE;
+                    on = FALSE;
+                }
+                if(on){
+                    i++;
+                    try{
+                        cRules[Integer.parseInt(data[i])].setSelected(TRUE);
+                    }catch(Exception e){
+
+                    }
+                }
+                else if(off){
+                    i++;
+                    try{
+                        cRules[Integer.parseInt(data[i])].setSelected(FALSE);
+                    }catch(Exception e){
+
+                    }
+                }
+            }
         usersSettings = TRUE;
-            if(data[2].equals("0"))
-                gridPaneHubLayout.add(lKick, 1, 3);
+            if(data[2].equals("0")) {
+                gridPaneHubLayout.add(bKick, 3, 3);
+                gridPaneHubLayout.add(cKick, 2, 3);
+                cKick.getItems().addAll("1", "2", "3", "4", "5", "6");
+            }
 
     }
 
