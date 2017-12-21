@@ -66,7 +66,7 @@ public class InGameView implements View {
             }
         });
 
-        Canvas canvas = new Canvas(540, 600);
+        Canvas canvas = new Canvas(800, 800);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         mapa.display(gc);
 
