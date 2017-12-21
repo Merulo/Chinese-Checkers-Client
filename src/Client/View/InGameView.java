@@ -2,6 +2,7 @@ package Client.View;
 
 import Client.Map.Map;
 import Client.Network.Connection;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -70,6 +72,14 @@ public class InGameView implements View {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         mapa.display(gc);
 
+
+        canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle (MouseEvent mouseEvent) {
+                System.out.println("X: " + mouseEvent.getX() + " Y: " + mouseEvent.getY());
+            }
+        });
 
         //Layout
         //instantiatig the GridPane class*/
