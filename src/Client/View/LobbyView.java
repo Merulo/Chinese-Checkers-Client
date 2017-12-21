@@ -48,7 +48,6 @@ public class LobbyView implements View {
     CheckBox[] cRules = new CheckBox[3];
     Button bAddBot = new Button("Dodaj bota");
 
-
     public LobbyView(Connection connection){
         this.connection = connection;
         for(int i=0; i<6; i++) {
@@ -66,20 +65,22 @@ public class LobbyView implements View {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                     if (cRules[finalI].isSelected()) {
-                        String msg = "RuleOn;";
-                        msg += finalI;
+                        String msg = "Settings;RuleOn;";
+                        msg = msg.concat(cRules[finalI].getText());
                         connection.send(msg);
                         System.out.println(msg);
                     } else {
-                        String msg = "RuleOff;";
-                        //msg = msg.concat(i);
-                        msg += finalI;
+                        String msg = "Settings;RuleOff;";
+                        msg = msg.concat(cRules[finalI].getText());
                         connection.send(msg);
                         System.out.println(msg);
                     }
                 }
             });
         }
+        tChatShow.setEditable(FALSE);
+        tChatShow.setMouseTransparent(TRUE);
+        tChatShow.setFocusTraversable(FALSE);
     }
 
     @Override
@@ -117,6 +118,26 @@ public class LobbyView implements View {
                 tChatShow.setText(tmp[1]+"\n");
             else
                 tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
+        }
+        else if(tmp[0].equals("Start")){
+            try{
+                //connection.send(message);
+                Stage stageTheLabelBelongs = (Stage) lGameName.getScene().getWindow();
+                //create new view and prepare connection
+                View next = new InGameView(connection);
+                connection.setView(next);
+
+                //crate javafx-friendly thread which will call the change
+
+                stageTheLabelBelongs.setScene(next.getScene());
+                //run the javafx-friendly thread
+                //task.run();
+                next.parse(message);
+                connection.send(message);
+            }
+            catch(Exception ex){
+
+            }
         }
         /*else if(tmp[0].equals("Size")){
             usersSettings = FALSE;
@@ -219,9 +240,8 @@ public class LobbyView implements View {
 
         bKick.setOnAction(e ->{
             String message = "Kick;";
-            message = message.concat(cKick.getValue());
-            System.out.println(message);
             try {
+                message = message.concat(cKick.getValue());
                 connection.send(message);
             } catch (Exception ex) {
 

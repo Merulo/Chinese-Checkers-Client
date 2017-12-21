@@ -2,6 +2,7 @@ package Client;
 
 import Client.Network.Connection;
 import Client.View.HubView;
+import Client.View.InGameView;
 import Client.View.LobbyView;
 import Client.View.View;
 import javafx.application.Application;
@@ -70,7 +71,7 @@ public class Main extends Application {
 
         //creates the connection on address and ip
         Connection connection = new Connection("localhost", 5555);
-        curret = new HubView(connection);
+        curret = new InGameView(connection);
         //curret = new LobbyView(connection);
         connection.setView(curret);
 
