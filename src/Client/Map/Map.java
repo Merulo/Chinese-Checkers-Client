@@ -294,4 +294,8 @@ public class Map {
         }
         move = 0;
     }
+
+    public void makeMove(int xa, int ya, int xb, int yb){
+        circles[xb][yb].setFill(circles[xa][ya].getFill());
+    }
 }

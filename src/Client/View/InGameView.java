@@ -41,7 +41,7 @@ public class InGameView implements View {
         for(int i=0; i<10; i++) {
 
         }
-        int tmp = (s + 1)*s/2;
+        int tmp = s*(s-1)/2;
         tChatShow.setEditable(FALSE);
         tChatShow.setMouseTransparent(TRUE);
         tChatShow.setFocusTraversable(FALSE);
@@ -50,15 +50,18 @@ public class InGameView implements View {
     }
 
     public void parse(String message){
-        System.out.println("**********************************");
         System.out.println(message);
-        System.out.println("**********************************");
         String[] tmp = message.split(";");
         if(tmp[0].equals("Msg")){
             if(tChatShow.getText().equals(""))
                 tChatShow.setText(tmp[1]+"\n");
             else
                 tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
+        }
+        if(tmp[0].equals("Move")){
+            String[] tmpA = tmp[1].split(",");
+            String[] tmpB = tmp[2].split(",");
+            mapa.makeMove(Integer.parseInt(tmpA[0]), Integer.parseInt(tmpA[1]), Integer.parseInt(tmpB[0]), Integer.parseInt(tmpB[1]));
         }
     }
 
