@@ -20,6 +20,7 @@ import java.util.Random;
 
 import static java.lang.Boolean.TRUE;
 import static java.lang.Boolean.FALSE;
+import static java.lang.Thread.sleep;
 
 public class LobbyView implements View {
 
@@ -136,7 +137,6 @@ public class LobbyView implements View {
                 connection.setView(next);
 
                 //crate javafx-friendly thread which will call the change
-
                 stageTheLabelBelongs.setScene(next.getScene());
                 //run the javafx-friendly thread
                 //task.run();
@@ -144,7 +144,7 @@ public class LobbyView implements View {
                 connection.send(message);
             }
             catch(Exception ex){
-
+                ex.printStackTrace();
             }
         }
         /*else if(tmp[0].equals("Size")){

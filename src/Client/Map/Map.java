@@ -1,6 +1,7 @@
 package Client.Map;
 
 import Client.Network.Connection;
+import Client.View.InGameView;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 
@@ -31,11 +33,9 @@ public class Map {
     private final Connection connection;
     private final Pane grid;
 
-    private Boolean first = TRUE;
-    private int currentX;
-    private int currentY;
-    private int destinationX;
-    private int destinationY;
+    private static boolean isSent = FALSE;
+    public static int move = 0;
+    public static int [][]moves = new int[10][2];
 
     int numberOfPlayers;
     double [][]colorsOfPlayers = new double[6][3];
@@ -76,7 +76,7 @@ public class Map {
     //creates the starting positions for players
     private void createStartingPositions(int rows){
         //the ⎾-like shaped
-        /*for(int i = 0; i < rows; i++){
+        for(int i = 0; i < rows; i++){
             for(int j = 0; j < rows - i; j++) {
                 array[i + rows][j + rows] = 2;
                 array[i + rows * 3 + 1][j + rows] = 2;
@@ -91,7 +91,10 @@ public class Map {
                 array[rows - i + rows * 2][rows - j - 1] = 2;
 
             }
-        }*/
+        }
+    }
+
+    private void colorPositions(){
 
         int i = 6/numberOfPlayers;
         if(numberOfPlayers == 4){
@@ -166,6 +169,7 @@ public class Map {
         gc.setFill(Color.GREEN);
         gc.setLineWidth(5);
 
+        createStartingPositions(rows);
         for(int i = 0; i < size; i++){
             for(int j =0; j < size; j++){
                 if(array[i][j] != 0){
@@ -176,15 +180,17 @@ public class Map {
                     int dx = ((int)(Math.floor(size/2)) - j) * - (FIELDSIZE + SPACINGSIZE)/2;
 
                     //gc.fillOval( (FIELDSIZE + SPACINGSIZE) * (i+1) + dx, (FIELDSIZE + SPACINGSIZE) * (j+1), FIELDSIZE, FIELDSIZE);
-                    circles[i][j] = new Circle((FIELDSIZE + SPACINGSIZE) * (i+1) + dx, (FIELDSIZE + SPACINGSIZE) * (j+1), FIELDSIZE/2, Color.BLACK);
+                    circles[i][j] = new Circle((FIELDSIZE + SPACINGSIZE) * (i+1) + dx, (FIELDSIZE + SPACINGSIZE) * (j+1), FIELDSIZE/2, Color.WHITE);
                     int finalI = i;
                     int finalJ = j;
                     circles[i][j].setOnMousePressed(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
                             System.out.println(finalI +" "+ finalJ);
-                            if(first){
-
+                            if(!isSent){
+                                moves[move][0] = finalI;
+                                moves[move][1] = finalJ;
+                                move++;
                             }
                         }
                     });
@@ -197,7 +203,8 @@ public class Map {
             }
         }
         //draw2Dmap(gc);
-        createStartingPositions(rows);
+        //createStartingPositions(rows);
+        colorPositions();
     }
     //draws the array w/o shifting
     public void draw2Dmap(GraphicsContext gc){
@@ -258,5 +265,28 @@ public class Map {
         createMapArray();
     }
 
+    public static int getMove(){
+        return move;
+    }
 
+    public static int getX(int k){
+        return moves[k][0];
+    }
+
+    public static int getY(int k){
+        return moves[k][1];
+    }
+
+    public static void setSent(boolean t){
+        isSent = t;
+    }
+
+    public static void clearMoves(){
+        for(int i=0; i<move; i++){
+            moves[i][0] = 0;
+            moves[i][1] = 0;
+            move = 0;
+            isSent = TRUE;
+        }
+    }
 }

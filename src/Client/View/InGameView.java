@@ -34,6 +34,7 @@ public class InGameView implements View {
 
     TextField tChat = new TextField();
     TextArea tChatShow = new TextArea();
+    Button bMoves = new Button("Wyślij ruchy");
 
     public InGameView(Connection connection, int s, int counter, double [][]colors){
         this.connection = connection;
@@ -60,6 +61,9 @@ public class InGameView implements View {
         }
     }
 
+    public static void sendMoves(){
+        System.out.println("......................................................");
+    }
     public Scene getScene(){
 
         tChat.setPromptText("Write...");
@@ -70,6 +74,22 @@ public class InGameView implements View {
             tChat.clear();
             try {
                 connection.send(message);
+            }
+            catch (Exception ex){
+
+            }
+        });
+        bMoves.setOnAction(e ->{
+            String msg = "Moves;";
+            for(int i=0; i<mapa.getMove(); i++){
+                msg = msg.concat(String.valueOf(mapa.getX(i)));
+                msg = msg.concat(",");
+                msg = msg.concat(String.valueOf(mapa.getY(i)));
+                msg = msg.concat(";");
+            }
+            try {
+                connection.send(msg);
+                mapa.clearMoves();
             }
             catch (Exception ex){
 
@@ -109,6 +129,9 @@ public class InGameView implements View {
         tChatShow.setMinHeight(500);
         tChatShow.setMinWidth(200);
         tChat.setMinWidth(200);
+        gridPaneHubLayout.getChildren().add(bMoves);
+        bMoves.setLayoutX(1000);
+        bMoves.setLayoutY(530);
         //gridPaneHubLayout.getChildren().add(canvas);
 
 
