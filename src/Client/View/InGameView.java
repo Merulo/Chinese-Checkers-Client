@@ -41,10 +41,11 @@ public class InGameView implements View {
         for(int i=0; i<10; i++) {
 
         }
+        int tmp = (s + 1)*s/2;
         tChatShow.setEditable(FALSE);
         tChatShow.setMouseTransparent(TRUE);
         tChatShow.setFocusTraversable(FALSE);
-        mapa = new Map(s, connection, gridPaneHubLayout, counter, colors);
+        mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors);
 
     }
 
