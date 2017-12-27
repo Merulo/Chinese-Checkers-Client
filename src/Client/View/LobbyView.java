@@ -29,6 +29,8 @@ public class LobbyView implements View {
     private boolean usersSettings = TRUE;
     private boolean master = FALSE;
 
+    double [][]colors = new double[6][3];
+
 
     GridPane gridPaneHubLayout = new GridPane();
 
@@ -85,6 +87,7 @@ public class LobbyView implements View {
 
     @Override
     public void parse(String message){
+        System.out.println(message);
         String[] tmp = message.split(";");
         if(tmp[0].equals("GameDetailedData")){
             usersSettings = FALSE;
@@ -119,12 +122,17 @@ public class LobbyView implements View {
             else
                 tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
         }
+        else if(tmp[0].equals("Close")){
+            bStart.setText("Start");
+            if(tmp.length > 1)
+                tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
+        }
         else if(tmp[0].equals("Start")){
             try{
                 //connection.send(message);
                 Stage stageTheLabelBelongs = (Stage) lGameName.getScene().getWindow();
                 //create new view and prepare connection
-                View next = new InGameView(connection);
+                View next = new InGameView(connection, Integer.parseInt(tSize.getText()), playerCount, colors);
                 connection.setView(next);
 
                 //crate javafx-friendly thread which will call the change
@@ -345,6 +353,10 @@ public class LobbyView implements View {
 
             lPlayers[playerCount].setText(data[1]);
             lPlayers[playerCount].setTextFill(new Color(r, g, b, 0.5));
+
+            colors[playerCount][0]=r;
+            colors[playerCount][1]=g;
+            colors[playerCount][2]=b;
 
             playerCount++;
         } catch (Exception e) {
