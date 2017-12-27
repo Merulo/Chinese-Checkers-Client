@@ -11,6 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.ArrayList;
+
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
@@ -35,7 +37,8 @@ public class Map {
 
     private static boolean isSent = FALSE;
     public static int move = 0;
-    public static int [][]moves = new int[10][2];
+    public static ArrayList movesX = new ArrayList();
+    public static ArrayList movesY = new ArrayList();
 
     int numberOfPlayers;
     double [][]colorsOfPlayers = new double[6][3];
@@ -124,37 +127,37 @@ public class Map {
                     case 0: {
                         /*map[rows - i - 1][rows - j + rows * 2].setPlayerOnField(player);
                         map[i + rows * 3 + 1][j + rows].setHomePlayer(player);*/
-                        circles[rows - i - 1][rows - j + rows * 2].setFill(new Color(r, g, b, 1));
+                        circles[rows -j + rows * 2][rows - i -1].setFill(new Color(r, g, b, 1));
                         break;
                     }
                     case 1: {
                         /*map[i + rows][j + rows * 3 + 1].setPlayerOnField(player);
                         map[rows - i + rows * 2][rows - j - 1].setHomePlayer(player);*/
-                        circles[i + rows][j + rows * 3 + 1].setFill(new Color(r, g, b, 1));
+                        circles[j + rows * 3 + 1][i + rows].setFill(new Color(r, g, b, 1));
                         break;
                     }
                     case 2: {
                         /*map[rows - i + rows * 2][rows - j + rows * 2].setPlayerOnField(player);
                         map[i + rows][j + rows].setHomePlayer(player);*/
-                        circles[rows - i + rows * 2][rows - j + rows * 2].setFill(new Color(r, g, b, 1));
+                        circles[rows - j + rows * 2][rows - i + rows * 2].setFill(new Color(r, g, b, 1));
                         break;
                     }
                     case 3: {
                         /*map[i + rows * 3 + 1][j + rows].setPlayerOnField(player);
                         map[rows - i - 1][rows - j + rows * 2].setHomePlayer(player);*/
-                        circles[i + rows * 3 + 1][j + rows].setFill(new Color(r, g, b, 1));
+                        circles[j + rows][i + rows * 3 + 1].setFill(new Color(r, g, b, 1));
                         break;
                     }
                     case 4: {
                         /*map[rows - i + rows * 2][rows - j - 1].setPlayerOnField(player);
                         map[i + rows][j + rows * 3 + 1].setHomePlayer(player);*/
-                        circles[rows - i + rows * 2][rows - j - 1].setFill(new Color(r, g, b, 1));
+                        circles[rows - j - 1][rows - i + rows * 2].setFill(new Color(r, g, b, 1));
                         break;
                     }
                     case 5: {
                         /*map[i + rows][j + rows].setPlayerOnField(player);
                         map[rows - i + rows * 2][rows - j + rows * 2].setHomePlayer(player);*/
-                        circles[i + rows][j + rows].setFill(new Color(r, g, b, 1));
+                        circles[j + rows][i + rows].setFill(new Color(r, g, b, 1));
                         break;
                     }
                 }
@@ -188,8 +191,8 @@ public class Map {
                         public void handle(MouseEvent event) {
                             System.out.println(finalI +" "+ finalJ);
                             if(!isSent){
-                                moves[move][0] = finalI;
-                                moves[move][1] = finalJ;
+                                movesX.add(finalI);
+                                movesY.add(finalJ);
                                 move++;
                             }
                         }
@@ -270,11 +273,11 @@ public class Map {
     }
 
     public static int getX(int k){
-        return moves[k][0];
+        return (int) movesX.get(k);
     }
 
     public static int getY(int k){
-        return moves[k][1];
+        return (int) movesY.get(k);
     }
 
     public static void setSent(boolean t){
@@ -283,10 +286,12 @@ public class Map {
 
     public static void clearMoves(){
         for(int i=0; i<move; i++){
-            moves[i][0] = 0;
-            moves[i][1] = 0;
-            move = 0;
+            movesX.remove(0);
+            movesY.remove(0);
+            //moves[i][0] = 0;
+            //moves[i][1] = 0;
             isSent = TRUE;
         }
+        move = 0;
     }
 }
