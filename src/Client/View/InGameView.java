@@ -77,6 +77,9 @@ public class InGameView implements View {
             String[] tmpB = tmp[2].split(",");
             mapa.makeMove(Integer.parseInt(tmpA[0]), Integer.parseInt(tmpA[1]), Integer.parseInt(tmpB[0]), Integer.parseInt(tmpB[1]));
         }
+        if(tmp[0].equals("YourTurn")){
+            mapa.setSent(FALSE);
+        }
     }
 
     public Scene getScene(){
@@ -103,6 +106,8 @@ public class InGameView implements View {
                 msg = msg.concat(";");
             }
             try {
+                System.out.println("*******************************");
+                System.out.println(msg);
                 connection.send(msg);
                 mapa.clearMoves();
             }
