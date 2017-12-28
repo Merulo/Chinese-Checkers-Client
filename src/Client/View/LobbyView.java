@@ -121,6 +121,8 @@ public class LobbyView implements View {
             int k = -1;
             try{
                 k = Integer.parseInt(tmp[1]);
+            }catch(Exception e){
+
             }
             /*for(int i=0; i<6; i++){
                 if(lPlayers[i].getText().equals(t)) {
@@ -351,6 +353,9 @@ public class LobbyView implements View {
         for(int i=0; i<3; i++)
             gridPaneHubLayout.add(cRules[i], 2, i+4);
 
+        gridPaneHubLayout.add(bKick, 3, 3);
+        gridPaneHubLayout.add(cKick, 2, 3);
+        cKick.getItems().addAll("1", "2", "3", "4", "5", "6");
 
         //Setting a scene obect;
         lobby=new Scene(gridPaneHubLayout);
@@ -393,9 +398,9 @@ public class LobbyView implements View {
         usersSettings = TRUE;
             //if(data[2].equals("0")) {
             //if(master){
-                gridPaneHubLayout.add(bKick, 3, 3);
+                /*gridPaneHubLayout.add(bKick, 3, 3);
                 gridPaneHubLayout.add(cKick, 2, 3);
-                cKick.getItems().addAll("1", "2", "3", "4", "5", "6");
+                cKick.getItems().addAll("1", "2", "3", "4", "5", "6");*/
             //}
 
     }

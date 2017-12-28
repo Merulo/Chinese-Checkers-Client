@@ -82,7 +82,13 @@ public class InGameView implements View {
             alert.setHeaderText(null);
             alert.setContentText("Wykonaj ruch");
 
-            alert.showAndWait();
+            alert.show();
+            try{
+                wait(1000);
+            }catch(Exception ex){
+
+            }
+            alert.close();
         }
         else if(tmp[0].equals("IncorrectMove")){
             mapa.setSent(FALSE);

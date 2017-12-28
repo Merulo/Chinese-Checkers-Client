@@ -37,8 +37,8 @@ public class Map {
 
     private static boolean isSent = FALSE;
     public static int move = 0;
-    public static ArrayList<Integer> movesX = new ArrayList<Integer>();
-    public static ArrayList<Integer> movesY = new ArrayList<Integer>();
+    public static ArrayList<Integer> movesX = new ArrayList<>();
+    public static ArrayList<Integer> movesY = new ArrayList<>();
 
     int numberOfPlayers;
     double [][]colorsOfPlayers = new double[6][3];
@@ -191,25 +191,29 @@ public class Map {
                         public void handle(MouseEvent event) {
                             System.out.println(finalI +" "+ finalJ);
                             if(!isSent) {
-                                try {
-                                    int a = (Integer) movesX.get(move).intValue();
-                                    int b = (Integer) movesY.get(move).intValue();
+                                try {System.out.println("///////////////////////////////////////////////////////////");
+                                    int a = movesX.get(move-1);
+                                    int b = movesY.get(move-1);
 
-                                    if (((finalI - a) == 1 && (finalJ - b) == 1) || ((finalI - a) == -1 && (finalJ - b) == -1) || ((finalI - a) == 0 && (finalJ - b) == 1) || ((finalI - a) == 0 && (finalJ - b) == -1) || ((finalI - a) == 1 && (finalJ - b) == 0) || ((finalI - a) == 1 && (finalJ - b) == -1)){
-                                        //TODO: dodać przekakiwane pola.
+                                    System.out.print(finalI-a+"  ");
+                                    System.out.println(finalJ-b);
+
+                                    if (((finalI - a) == -1 && (finalJ - b) == 1) || ((finalI - a) == 1 && (finalJ - b) == -1) || ((finalI - a) == 0 && (finalJ - b) == 1) || ((finalI - a) == 0 && (finalJ - b) == -1) || ((finalI - a) == 1 && (finalJ - b) == 0) || ((finalI - a) == -1 && (finalJ - b) == 0)){
                                         movesX.add(finalI);
                                         movesY.add(finalJ);
                                         move++;
                                     }
-                                    else if(((finalI - a) == 2 && (finalJ - b) == 2) || ((finalI - a) == -2 && (finalJ - b) == -2) || ((finalI - a) == 0 && (finalJ - b) == 2) || ((finalI - a) == 0 && (finalJ - b) == -2) || ((finalI - a) == 2 && (finalJ - b) == 0) || ((finalI - a) == 2 && (finalJ - b) == -2)){
+                                    else if(((finalI - a) == -2 && (finalJ - b) == 2) || ((finalI - a) == 2 && (finalJ - b) == -2) || ((finalI - a) == 0 && (finalJ - b) == 2) || ((finalI - a) == 0 && (finalJ - b) == -2) || ((finalI - a) == 2 && (finalJ - b) == 0) || ((finalI - a) == 2 && (finalJ - b) == -2)){
                                         movesX.add(a + ((finalI - a)/2));
                                         movesY.add(b + ((finalJ - b)/2));
+                                        System.out.println("a "+a);
+                                        System.out.println("b "+b);
                                         move++;
                                         movesX.add(finalI);
                                         movesY.add(finalJ);
                                         move++;
                                     }
-                                    else if(((finalI - a) == 3 && (finalJ - b) == 3)){
+                                    else if(((finalI - a) == -3 && (finalJ - b) == 3)){
                                         movesX.add(a+1);
                                         movesY.add(b+1);
                                         move++;
@@ -220,7 +224,7 @@ public class Map {
                                         movesY.add(finalJ);
                                         move++;
                                     }
-                                    else if((finalI - a) == -3 && (finalJ - b) == -3){
+                                    else if((finalI - a) == 3 && (finalJ - b) == -3){
                                         movesX.add(a-1);
                                         movesY.add(b-1);
                                         move++;
