@@ -166,8 +166,20 @@ public class LobbyView implements View {
             }
         }
         else if(tmp[0].equals("Countdown")){
-            alert.close();
-            alert.showAndWait();
+            try{
+                alert.close();
+                alert.show();
+                sleep(1000);
+                alert.close();
+            }catch(Exception e) {
+                try {
+                    alert.show();
+                    sleep(1000);
+                    alert.close();
+                }catch(Exception ex){
+
+                }
+            }
         }
         /*else if(tmp[0].equals("Size")){
             usersSettings = FALSE;
