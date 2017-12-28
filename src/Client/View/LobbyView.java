@@ -90,7 +90,7 @@ public class LobbyView implements View {
                             System.out.println(msg);
                         }
                         else{
-                            cRules[finalI].setSelected(FALSE);
+                            cRules[finalI].setSelected(TRUE);
                         }
                     }
                 }
