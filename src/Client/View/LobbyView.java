@@ -118,13 +118,17 @@ public class LobbyView implements View {
         }
         else if(tmp[0].equals("Remove")){
             String t=tmp[1];
-            int k=-1;
-            for(int i=0; i<6; i++){
+            int k = -1;
+            try{
+                k = Integer.parseInt(tmp[1]);
+            }
+            /*for(int i=0; i<6; i++){
                 if(lPlayers[i].getText().equals(t)) {
                     k = i;
                     playerCount--;
+                    i=6;
                 }
-            }
+            }*/
             if(k>=0) {
                 if (k < 5 && lPlayers[k].getText().equals(t)) {
                     while (k < 5) {
