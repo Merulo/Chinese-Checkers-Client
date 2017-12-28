@@ -82,8 +82,14 @@ public class LobbyView implements View {
             });
         }
         tChatShow.setEditable(FALSE);
-        tChatShow.setMouseTransparent(TRUE);
+        //tChatShow.setMouseTransparent(TRUE);
         tChatShow.setFocusTraversable(FALSE);
+        tChatShow.textProperty().addListener(new ChangeListener<Object>(){
+            @Override
+            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue){
+                tChatShow.setScrollTop(Double.MAX_VALUE);
+            }
+        });
     }
 
     @Override
@@ -118,15 +124,22 @@ public class LobbyView implements View {
             }
         }
         else if(tmp[0].equals("Msg")){
-            if(tChatShow.getText().equals(""))
-                tChatShow.setText(tmp[1]+"\n");
-            else
-                tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
+            if(tChatShow.getText().equals("")) {
+                tChatShow.setText(tmp[1] + "\n");
+                tChatShow.selectPositionCaret(tChatShow.getLength());
+                tChatShow.deselect();
+            }
+            else {
+                tChatShow.setText(tChatShow.getText() + tmp[1] + "\n");
+                tChatShow.selectPositionCaret(tChatShow.getLength());
+                tChatShow.deselect();
+            }
         }
-        else if(tmp[0].equals("Close")){
+        else if(tmp[0].equals("Close")) {
             bStart.setText("Start");
-            if(tmp.length > 1)
-                tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
+            if (tmp.length > 1){
+                tChatShow.setText(tChatShow.getText() + tmp[1] + "\n");
+            }
         }
         else if(tmp[0].equals("Start")){
             try{

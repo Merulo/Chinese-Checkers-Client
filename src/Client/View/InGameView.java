@@ -2,6 +2,8 @@ package Client.View;
 
 import Client.Map.Map;
 import Client.Network.Connection;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,8 +45,14 @@ public class InGameView implements View {
         }
         int tmp = s*(s-1)/2;
         tChatShow.setEditable(FALSE);
-        tChatShow.setMouseTransparent(TRUE);
+        //tChatShow.setMouseTransparent(TRUE);
         tChatShow.setFocusTraversable(FALSE);
+        tChatShow.textProperty().addListener(new ChangeListener<Object>(){
+            @Override
+            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue){
+                tChatShow.setScrollTop(Double.MAX_VALUE);
+            }
+        });
         mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors);
 
     }
@@ -53,10 +61,16 @@ public class InGameView implements View {
         System.out.println(message);
         String[] tmp = message.split(";");
         if(tmp[0].equals("Msg")){
-            if(tChatShow.getText().equals(""))
-                tChatShow.setText(tmp[1]+"\n");
-            else
-                tChatShow.setText(tChatShow.getText()+tmp[1]+"\n");
+            if(tChatShow.getText().equals("")) {
+                tChatShow.setText(tmp[1] + "\n");
+                tChatShow.selectPositionCaret(tChatShow.getLength());
+                tChatShow.deselect();
+            }
+            else {
+                tChatShow.setText(tChatShow.getText() + tmp[1] + "\n");
+                tChatShow.selectPositionCaret(tChatShow.getLength());
+                tChatShow.deselect();
+            }
         }
         if(tmp[0].equals("Move")){
             String[] tmpA = tmp[1].split(",");
@@ -65,9 +79,6 @@ public class InGameView implements View {
         }
     }
 
-    public static void sendMoves(){
-        System.out.println("......................................................");
-    }
     public Scene getScene(){
 
         tChat.setPromptText("Write...");
