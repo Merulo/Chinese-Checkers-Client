@@ -28,7 +28,7 @@ public class LobbyView implements View {
     private Connection connection;
     private int playerCount = 0;
     private boolean usersSettings = TRUE;
-    private boolean master = FALSE;
+    private boolean master = TRUE;
 
     double [][]colors = new double[6][3];
 
@@ -73,15 +73,22 @@ public class LobbyView implements View {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                     if (cRules[finalI].isSelected()) {
-                        String msg = "Settings;RuleOn;";
-                        msg = msg.concat(cRules[finalI].getText());
-                        connection.send(msg);
-                        System.out.println(msg);
+                        if(master){
+                            String msg = "Settings;RuleOn;";
+                            msg = msg.concat(cRules[finalI].getText());
+                            connection.send(msg);
+                            System.out.println(msg);
+                        }
+                        else{
+                            cRules[finalI].setSelected(FALSE);
+                        }
                     } else {
-                        String msg = "Settings;RuleOff;";
-                        msg = msg.concat(cRules[finalI].getText());
-                        connection.send(msg);
-                        System.out.println(msg);
+                        if(master){
+                            String msg = "Settings;RuleOff;";
+                            msg = msg.concat(cRules[finalI].getText());
+                            connection.send(msg);
+                            System.out.println(msg);
+                        }
                     }
                 }
             });
@@ -130,7 +137,7 @@ public class LobbyView implements View {
         }
         else if(tmp[0].equals("Msg")){
             if(tChatShow.getText().equals("")) {
-                tChatShow.setText(tmp[1] + "\n");
+                tChatShow.setText(message.substring(4) + "\n");
                 tChatShow.selectPositionCaret(tChatShow.getLength());
                 tChatShow.deselect();
             }
@@ -145,6 +152,9 @@ public class LobbyView implements View {
             if (tmp.length > 1){
                 tChatShow.setText(tChatShow.getText() + tmp[1] + "\n");
             }
+        }
+        else if(tmp[0].equals("Cancle")){
+            bStart.setText("Start");
         }
         else if(tmp[0].equals("Start")){
             try{
@@ -180,6 +190,9 @@ public class LobbyView implements View {
 
                 }
             }
+        }
+        else if(tmp[0].equals("Master")){
+            master = TRUE;
         }
         /*else if(tmp[0].equals("Size")){
             usersSettings = FALSE;
@@ -282,20 +295,24 @@ public class LobbyView implements View {
 
         bKick.setOnAction(e ->{
             String message = "Kick;";
-            try {
-                message = message.concat(cKick.getValue());
-                connection.send(message);
-            } catch (Exception ex) {
+            if(master){
+                try {
+                    message = message.concat(cKick.getValue());
+                    connection.send(message);
+                } catch (Exception ex) {
 
+                }
             }
         });
 
         bAddBot.setOnAction(e ->{
             String message = "AddBot;";
-            try {
-                connection.send(message);
-            } catch (Exception ex) {
+            if(master){
+                try {
+                    connection.send(message);
+                } catch (Exception ex) {
 
+                }
             }
         });
 
@@ -370,11 +387,12 @@ public class LobbyView implements View {
                 }
             }
         usersSettings = TRUE;
-            if(data[2].equals("0")) {
+            //if(data[2].equals("0")) {
+            //if(master){
                 gridPaneHubLayout.add(bKick, 3, 3);
                 gridPaneHubLayout.add(cKick, 2, 3);
                 cKick.getItems().addAll("1", "2", "3", "4", "5", "6");
-            }
+            //}
 
     }
 

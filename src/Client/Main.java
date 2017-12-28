@@ -11,10 +11,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -73,33 +70,36 @@ public class Main extends Application {
         Connection connection = new Connection("localhost", 5555);
         curret = new HubView(connection);
         //curret = new LobbyView(connection);
-        connection.setView(curret);
 
         //starts the connection
         if(!connection.start()){
             System.out.println("CANT ESTABLISH CONNECTION!");
             //TODO: BRING UP CONNECTING MENU
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Błąd połączenia");
+            alert.setHeaderText(null);
+            alert.setContentText("Nie można ustanowić połączenia. Spóbuj ponownie później.");
+            alert.showAndWait();
+            System.exit(0);
         }
+        else {
+            connection.setView(curret);
 
+            //Swithing the scene: window.setScene( nazwa_sceny );
+            window.setTitle("Chinese Checkers");
+            //primaryStage.setScene(new Scene(createContent()));
+            window.setScene(curret.getScene());
+            window.show();
 
+            window.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    connection.send("Leave");
+                    System.out.println("Stage is closing");
+                    System.exit(0);
 
-
-
-
-        //Swithing the scene: window.setScene( nazwa_sceny );
-        window.setTitle("Chinese Checkers");
-        //primaryStage.setScene(new Scene(createContent()));
-        window.setScene(curret.getScene());
-        window.show();
-
-        window.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                connection.send("Leave");
-                System.out.println("Stage is closing");
-                System.exit(0);
-
-            }
-        });
+                }
+            });
+        }
     }
 
     public static void main(String[] args) {
