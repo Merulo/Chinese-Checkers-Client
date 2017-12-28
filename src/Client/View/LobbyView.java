@@ -89,6 +89,9 @@ public class LobbyView implements View {
                             connection.send(msg);
                             System.out.println(msg);
                         }
+                        else{
+                            cRules[finalI].setSelected(FALSE);
+                        }
                     }
                 }
             });
