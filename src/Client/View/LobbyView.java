@@ -28,7 +28,7 @@ public class LobbyView implements View {
     private Connection connection;
     private int playerCount = 0;
     private boolean usersSettings = TRUE;
-    private boolean master = TRUE;
+    private boolean master = FALSE;
 
     double [][]colors = new double[6][3];
 
@@ -73,25 +73,25 @@ public class LobbyView implements View {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                     if (cRules[finalI].isSelected()) {
-                        if(master){
+                        if(master && usersSettings){
                             String msg = "Settings;RuleOn;";
                             msg = msg.concat(cRules[finalI].getText());
                             connection.send(msg);
                             System.out.println(msg);
                         }
-                        else{
+                        /*else{
                             cRules[finalI].setSelected(FALSE);
-                        }
+                        }*/
                     } else {
-                        if(master){
+                        if(master && usersSettings){
                             String msg = "Settings;RuleOff;";
                             msg = msg.concat(cRules[finalI].getText());
                             connection.send(msg);
                             System.out.println(msg);
                         }
-                        else{
+                        /*else{
                             cRules[finalI].setSelected(TRUE);
-                        }
+                        }*/
                     }
                 }
             });
@@ -384,7 +384,8 @@ public class LobbyView implements View {
                 if(on){
                     i++;
                     try{
-                        cRules[Integer.parseInt(data[i])].setSelected(TRUE);
+                        if(!cRules[Integer.parseInt(data[i])].isSelected())
+                            cRules[Integer.parseInt(data[i])].setSelected(TRUE);
                     }catch(Exception e){
 
                     }
@@ -392,7 +393,8 @@ public class LobbyView implements View {
                 else if(off){
                     i++;
                     try{
-                        cRules[Integer.parseInt(data[i])].setSelected(FALSE);
+                        if(cRules[Integer.parseInt(data[i])].isSelected())
+                            cRules[Integer.parseInt(data[i])].setSelected(FALSE);
                     }catch(Exception e){
 
                     }
