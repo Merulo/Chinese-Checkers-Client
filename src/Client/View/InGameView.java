@@ -77,6 +77,12 @@ public class InGameView implements View {
         }
         else if(tmp[0].equals("YourTurn")){
             mapa.setSent(FALSE);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Twój ruch");
+            alert.setHeaderText(null);
+            alert.setContentText("Wykonaj ruch");
+
+            alert.showAndWait();
         }
         else if(tmp[0].equals("IncorrectMove")){
             mapa.setSent(FALSE);
