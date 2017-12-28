@@ -50,6 +50,7 @@ public class LobbyView implements View {
     ChoiceBox<String> cKick = new ChoiceBox<>();
     CheckBox[] cRules = new CheckBox[3];
     Button bAddBot = new Button("Dodaj bota");
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
     public LobbyView(Connection connection){
         this.connection = connection;
@@ -57,6 +58,10 @@ public class LobbyView implements View {
             lPlayers[i] = new Label("");
             lNumbers[i] = new Label(String.valueOf(i+1));
         }
+
+        alert.setTitle("Zaczynamy");
+        alert.setHeaderText(null);
+        alert.setContentText("Rozpoczęto odliczanie do startu");
 
         cRules[0] = new CheckBox("Ruch na jedno pole obok");
         cRules[1] = new CheckBox("Przeskoczenie jednego, dowolnego pionka");
@@ -159,6 +164,10 @@ public class LobbyView implements View {
             catch(Exception ex){
                 ex.printStackTrace();
             }
+        }
+        else if(tmp[0].equals("Countdown")){
+            alert.close();
+            alert.showAndWait();
         }
         /*else if(tmp[0].equals("Size")){
             usersSettings = FALSE;

@@ -11,12 +11,10 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 
@@ -72,13 +70,27 @@ public class InGameView implements View {
                 tChatShow.deselect();
             }
         }
-        if(tmp[0].equals("Move")){
+        else if(tmp[0].equals("Move")){
             String[] tmpA = tmp[1].split(",");
             String[] tmpB = tmp[2].split(",");
             mapa.makeMove(Integer.parseInt(tmpA[0]), Integer.parseInt(tmpA[1]), Integer.parseInt(tmpB[0]), Integer.parseInt(tmpB[1]));
         }
-        if(tmp[0].equals("YourTurn")){
+        else if(tmp[0].equals("YourTurn")){
             mapa.setSent(FALSE);
+        }
+        else if(tmp[0].equals("IncorrectMove")){
+            mapa.setSent(FALSE);
+            /*final Popup popup = new Popup();
+            popup.setX(300);
+            popup.setY(200);
+            popup.getContent().addAll(new Label("Błędny ruch. Powtórz"));
+            popup.show(gridPaneHubLayout.getScene().getWindow());*/
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Błędny rcuh!");
+            alert.setHeaderText(null);
+            alert.setContentText("Popraw ruch.");
+
+            alert.showAndWait();
         }
     }
 
