@@ -1,31 +1,21 @@
 package Client.View;
 
 import Client.Network.Connection;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-
-import java.util.Random;
 
 import static java.lang.Boolean.TRUE;
 import static java.lang.Boolean.FALSE;
-import static java.lang.Thread.sleep;
 
 public class LobbyView implements View {
 
-    private Scene lobby;
-    private Connection connection;
+    private final Connection connection;
     private int playerCount = 0;
     private boolean usersSettings = TRUE;
     private boolean master = FALSE;
@@ -34,26 +24,26 @@ public class LobbyView implements View {
     private double cG;
     private double cB;
 
-    private double [][]colors = new double[6][3];
+    private final double [][]colors = new double[6][3];
 
 
-    private GridPane gridPaneHubLayout = new GridPane();
+    private final GridPane gridPaneHubLayout = new GridPane();
 
-    private Label[] lPlayers = new Label[6];
-    private Label[] lNumbers = new Label[6];
-    private Label lGameName = new Label("");
-    private TextField tChat = new TextField();
-    private TextArea tChatShow = new TextArea();
-    private ChoiceBox<String> choiceBox = new ChoiceBox<>();
-    private Label lChoice = new Label("Ilość graczy: ");
-    private TextField tSize = new TextField();
-    private Label lSize = new Label("Wielkosć planszy: ");
-    private Button bStart = new Button("Start");
-    private Button bLeave = new Button("Wyjdź");
-    private Button bKick = new Button ("Wyrzuć");
-    private ChoiceBox<String> cKick = new ChoiceBox<>();
-    private CheckBox[] cRules = new CheckBox[3];
-    private Button bAddBot = new Button("Dodaj bota");
+    private final Label[] lPlayers = new Label[6];
+    private final Label[] lNumbers = new Label[6];
+    private final Label lGameName = new Label("");
+    private final TextField tChat = new TextField();
+    private final TextArea tChatShow = new TextArea();
+    private final ChoiceBox<String> choiceBox = new ChoiceBox<>();
+    private final Label lChoice = new Label("Ilość graczy: ");
+    private final TextField tSize = new TextField();
+    private final Label lSize = new Label("Wielkosć planszy: ");
+    private final Button bStart = new Button("Start");
+    private final Button bLeave = new Button("Wyjdź");
+    private final Button bKick = new Button ("Wyrzuć");
+    private final ChoiceBox<String> cKick = new ChoiceBox<>();
+    private final CheckBox[] cRules = new CheckBox[3];
+    private final Button bAddBot = new Button("Dodaj bota");
     //Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
     LobbyView(Connection connection){
@@ -75,30 +65,18 @@ public class LobbyView implements View {
             int finalI = i;
             cRules[i].selectedProperty().addListener((observable, oldValue, newValue) -> {
                 if (cRules[finalI].isSelected()) {
-                    if(master && usersSettings){
+                    if( usersSettings){
                         String msg = "Settings;RuleOn;";
                         msg = msg.concat(cRules[finalI].getText());
                         connection.send(msg);
                         System.out.println(msg);
                     }
-                    /*else{
-                        cRules[finalI].setSelected(FALSE);
-                    }*/
-                    else if(!master && !usersSettings){
-                        cRules[finalI].setSelected(TRUE);
-                    }
                 } else {
-                    if(master && usersSettings){
+                    if(usersSettings){
                         String msg = "Settings;RuleOff;";
                         msg = msg.concat(cRules[finalI].getText());
                         connection.send(msg);
                         System.out.println(msg);
-                    }
-                    /*else{
-                        cRules[finalI].setSelected(TRUE);
-                    }*/
-                    else if(!master && !usersSettings){
-                        cRules[finalI].setSelected(FALSE);
                     }
                 }
             });
@@ -123,7 +101,6 @@ public class LobbyView implements View {
                 parsePlayerList(tmp);
                 break;
             case "Remove": {
-                String t = tmp[1];
                 int k = -1;
                 playerCount--;
                 try {
@@ -366,8 +343,7 @@ public class LobbyView implements View {
         cKick.getItems().addAll("1", "2", "3", "4", "5", "6");
 
         //Setting a scene obect;
-        lobby=new Scene(gridPaneHubLayout);
-        return lobby;
+        return new Scene(gridPaneHubLayout);
     }
 
     private void parseGameData(String[] data){
