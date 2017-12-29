@@ -24,12 +24,9 @@ public class Main extends Application {
 
 
     private Stage window;
-    //TODO: lobby Scene
     private Scene lobby;
-    //TODO: in_game Scene
     private Scene in_game;
 
-    //TODO: ASSIGN THIS TO LOBBY SCENE
     /*private Parent createContent(){
         TextArea messages = new TextArea();
         messages.setPrefHeight(550);
@@ -39,7 +36,6 @@ public class Main extends Application {
         Connection connection = new Connection("localhost", 5555);
         //starts the connection
         connection.start();
-        //TODO: SET PROPER MESSAGE PARSER
         connection.addMessageParser(messages);
 
         //event handler
@@ -60,7 +56,7 @@ public class Main extends Application {
         return root;
     }*/
 
-    View curret;
+    private View curret;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -74,7 +70,6 @@ public class Main extends Application {
         //starts the connection
         if(!connection.start()){
             System.out.println("CANT ESTABLISH CONNECTION!");
-            //TODO: BRING UP CONNECTING MENU
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Błąd połączenia");
             alert.setHeaderText(null);
@@ -91,13 +86,11 @@ public class Main extends Application {
             window.setScene(curret.getScene());
             window.show();
 
-            window.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                public void handle(WindowEvent we) {
-                    connection.send("Leave");
-                    System.out.println("Stage is closing");
-                    System.exit(0);
+            window.setOnCloseRequest(we -> {
+                connection.send("Leave");
+                System.out.println("Stage is closing");
+                System.exit(0);
 
-                }
             });
         }
     }

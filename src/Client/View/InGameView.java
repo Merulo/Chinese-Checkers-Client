@@ -28,31 +28,26 @@ public class InGameView implements View {
     private Map mapa/* = new Map(5, connection)*/;
 
 
-    Group group = new Group();
-    Pane gridPaneHubLayout = new Pane(group);
+    private Group group = new Group();
+    private Pane gridPaneHubLayout = new Pane(group);
 
 
-    TextField tChat = new TextField();
-    TextArea tChatShow = new TextArea();
-    Button bMoves = new Button("Wyślij ruchy");
-    Button bSkip = new Button("Anuluj ruch");
-    Button bBackToHub = new Button("Wróc do Hub");
+    private TextField tChat = new TextField();
+    private TextArea tChatShow = new TextArea();
+    private Button bMoves = new Button("Wyślij ruchy");
+    private Button bSkip = new Button("Anuluj ruch");
+    private Button bBackToHub = new Button("Wróc do Hub");
 
-    public InGameView(Connection connection, int s, int counter, double [][]colors, double cR, double cG, double cB){
+    InGameView(Connection connection, int s, int counter, double[][] colors, double cR, double cG, double cB){
         this.connection = connection;
-        for(int i=0; i<10; i++) {
+        /*for(int i=0; i<10; i++) {
 
-        }
+        }*/
         int tmp = s*(s-1)/2;
         tChatShow.setEditable(FALSE);
         //tChatShow.setMouseTransparent(TRUE);
         tChatShow.setFocusTraversable(FALSE);
-        tChatShow.textProperty().addListener(new ChangeListener<Object>(){
-            @Override
-            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue){
-                tChatShow.setScrollTop(Double.MAX_VALUE);
-            }
-        });
+        tChatShow.textProperty().addListener((ChangeListener<Object>) (observable, oldValue, newValue) -> tChatShow.setScrollTop(Double.MAX_VALUE));
         mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors, cR, cG, cB);
 
     }
@@ -60,25 +55,25 @@ public class InGameView implements View {
     public void parse(String message){
         System.out.println(message);
         String[] tmp = message.split(";");
-        if(tmp[0].equals("Msg")){
-            if(tChatShow.getText().equals("")) {
-                tChatShow.setText(tmp[1] + "\n");
-                tChatShow.selectPositionCaret(tChatShow.getLength());
-                tChatShow.deselect();
-            }
-            else {
-                tChatShow.setText(tChatShow.getText() + tmp[1] + "\n");
-                tChatShow.selectPositionCaret(tChatShow.getLength());
-                tChatShow.deselect();
-            }
-        }
-        else if(tmp[0].equals("Move")){
-            String[] tmpA = tmp[1].split(",");
-            String[] tmpB = tmp[2].split(",");
-            mapa.makeMove(Integer.parseInt(tmpA[0]), Integer.parseInt(tmpA[1]), Integer.parseInt(tmpB[0]), Integer.parseInt(tmpB[1]));
-        }
-        else if(tmp[0].equals("YourTurn")){
-            mapa.setSent(FALSE);
+        switch (tmp[0]) {
+            case "Msg":
+                if (tChatShow.getText().equals("")) {
+                    tChatShow.setText(tmp[1] + "\n");
+                    tChatShow.selectPositionCaret(tChatShow.getLength());
+                    tChatShow.deselect();
+                } else {
+                    tChatShow.setText(tChatShow.getText() + tmp[1] + "\n");
+                    tChatShow.selectPositionCaret(tChatShow.getLength());
+                    tChatShow.deselect();
+                }
+                break;
+            case "Move":
+                String[] tmpA = tmp[1].split(",");
+                String[] tmpB = tmp[2].split(",");
+                mapa.makeMove(Integer.parseInt(tmpA[0]), Integer.parseInt(tmpA[1]), Integer.parseInt(tmpB[0]), Integer.parseInt(tmpB[1]));
+                break;
+            case "YourTurn":
+                Map.setSent(FALSE);
             /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Twój ruch");
             alert.setHeaderText(null);
@@ -91,30 +86,30 @@ public class InGameView implements View {
 
             }
             alert.close();*/
-            mapa.underlineColor(TRUE);
-        }
-        else if(tmp[0].equals("IncorrectMove")){
-            mapa.setSent(FALSE);
+                mapa.underlineColor(TRUE);
+                break;
+            case "IncorrectMove":
+                Map.setSent(FALSE);
             /*final Popup popup = new Popup();
             popup.setX(300);
             popup.setY(200);
             popup.getContent().addAll(new Label("Błędny ruch. Powtórz"));
             popup.show(gridPaneHubLayout.getScene().getWindow());*/
-            mapa.underlineColor(TRUE);
+                mapa.underlineColor(TRUE);
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Błędny rcuh!");
-            alert.setHeaderText(null);
-            alert.setContentText("Popraw ruch.");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Błędny rcuh!");
+                alert.setHeaderText(null);
+                alert.setContentText("Popraw ruch.");
 
-            alert.showAndWait();
+                alert.showAndWait();
+                break;
         }
     }
 
     public Scene getScene(){
 
         tChat.setPromptText("Write...");
-        //TODO: Specify messages sending to the server.
         tChat.setOnAction(e ->{
             String message = "Msg;";
             message=message.concat(tChat.getText());
@@ -123,31 +118,31 @@ public class InGameView implements View {
                 connection.send(message);
             }
             catch (Exception ex){
-
+                System.out.println("Sending problems occured.");
             }
         });
         bMoves.setOnAction(e ->{
             String msg = "Moves;";
-            for(int i=0; i<mapa.getMove(); i++){
-                msg = msg.concat(String.valueOf(mapa.getX(i)));
+            for(int i = 0; i< Map.getMove(); i++){
+                msg = msg.concat(String.valueOf(Map.getX(i)));
                 msg = msg.concat(",");
-                msg = msg.concat(String.valueOf(mapa.getY(i)));
+                msg = msg.concat(String.valueOf(Map.getY(i)));
                 msg = msg.concat(";");
             }
             try {
                 System.out.println("*******************************");
                 System.out.println(msg);
                 connection.send(msg);
-                mapa.clearMoves();
+                Map.clearMoves();
                 mapa.underlineColor(FALSE);
             }
             catch (Exception ex){
-
+                System.out.println("Sending problems occured.");
             }
         });
         bSkip.setOnAction(e ->{
-            mapa.clearMoves();
-            mapa.setSent(FALSE);
+            Map.clearMoves();
+            Map.setSent(FALSE);
         });
         bBackToHub.setOnAction(e ->{
             String message="Leave;";
@@ -175,13 +170,7 @@ public class InGameView implements View {
         mapa.display(gc);
 
 
-        canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle (MouseEvent mouseEvent) {
-                System.out.println("X: " + mouseEvent.getX() + " Y: " + mouseEvent.getY());
-            }
-        });
+        canvas.setOnMousePressed(mouseEvent -> System.out.println("X: " + mouseEvent.getX() + " Y: " + mouseEvent.getY()));
 
         //Layout
         //instantiatig the GridPane class*/

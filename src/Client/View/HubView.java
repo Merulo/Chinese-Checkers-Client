@@ -21,9 +21,9 @@ public class HubView implements View {
     private Scene hub;
     private Connection connection;
 
-    Label[] lGames = new Label[10];
-    Button[] bEnterGame = new Button[10];
-    TextField tNickname = new TextField();
+    private Label[] lGames = new Label[10];
+    private Button[] bEnterGame = new Button[10];
+    private TextField tNickname = new TextField();
 
     public HubView(Connection connection){
         this.connection = connection;
@@ -40,35 +40,39 @@ public class HubView implements View {
         //Incoming messages parser
         String[] tmp = message.split(";");
 
-        for(int i=0; i<tmp.length; i++)
-           System.out.println(tmp[i]);
+        for (String aTmp : tmp) System.out.println(aTmp);
 
         if(tmp[0].equals("GameData")){
             if(tmp.length==6){
                 int game = Integer.parseInt(tmp[1]);
-                String info = new String(tmp[2]);
+                String info = tmp[2];
                 info = info.concat("\t\t");
                 info = info.concat(tmp[3]+"/"+tmp[4]);
 
                 lGames[game].setText(info);
 
-                if(tmp[5].equals("Open"))
-                    lGames[game].setTextFill(Color.GREEN);
-                else if(tmp[5].equals("Playing"))
-                    lGames[game].setTextFill(Color.RED);
-                else if(tmp[5].equals("Ready to start"))
-                    lGames[game].setTextFill(Color.YELLOW);
-                else if(tmp[5].equals("Restarting"))
-                    lGames[game].setTextFill(Color.BLUE);
-                else if(tmp[5].equals("Full"))
-                    lGames[game].setTextFill(Color.ORANGE);
+                switch (tmp[5]) {
+                    case "Open":
+                        lGames[game].setTextFill(Color.GREEN);
+                        break;
+                    case "Playing":
+                        lGames[game].setTextFill(Color.RED);
+                        break;
+                    case "Ready to start":
+                        lGames[game].setTextFill(Color.YELLOW);
+                        break;
+                    case "Restarting":
+                        lGames[game].setTextFill(Color.BLUE);
+                        break;
+                    case "Full":
+                        lGames[game].setTextFill(Color.ORANGE);
+                        break;
+                }
             }
             else
                 System.out.println("Too small amount of parameters in GameData");
         }
         else if(tmp[0].equals("GameDetailedData")){
-            //TODO: CLEAR IT A BIT
-            //TODO: CONSIDER MOVING IT TO DIFFERENT METHOD
             //get the current stage that we are in
             Stage stageTheLabelBelongs = (Stage) tNickname.getScene().getWindow();
             //create new view and prepare connection
@@ -95,8 +99,9 @@ public class HubView implements View {
             //String finalS = s;
             int finalI = i;
             bEnterGame[i].setOnAction(e -> {
+                String k = "Nick;";
                 if(tNickname.getText().length()>0){
-                    String k = new String("Nick;");
+                    //String k = new String("Nick;");
                     k = k.concat(tNickname.getText().replaceAll(";", ":"));
                     String finalK = k;
                     connection.send(finalK);
@@ -108,7 +113,7 @@ public class HubView implements View {
 
                 }
                 else{
-                    String k = new String("Nick;");
+                    //String k = new String("Nick;");
                     k = k.concat("Player");
                     Random gen = new Random();
                     int tmp  = gen.nextInt(100);
