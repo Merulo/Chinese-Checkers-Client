@@ -283,6 +283,15 @@ public class LobbyView implements View {
 
                     }
                 }
+                else{
+                    try {
+                        num="5";
+                        message = message.concat(num);
+                        connection.send(message);
+                    } catch (Exception ignored) {
+
+                    }
+                }
             }
         });
 
