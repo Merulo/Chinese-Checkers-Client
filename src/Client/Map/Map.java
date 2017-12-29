@@ -43,6 +43,11 @@ public class Map {
     int numberOfPlayers;
     double [][]colorsOfPlayers = new double[6][3];
     int rows;
+    double cG;
+    double cR;
+    double cB;
+
+    private Circle myColor = new Circle(30, 30, 20);
 
     //creates map array
     private void createMapArray(){
@@ -128,36 +133,54 @@ public class Map {
                         /*map[rows - i - 1][rows - j + rows * 2].setPlayerOnField(player);
                         map[i + rows * 3 + 1][j + rows].setHomePlayer(player);*/
                         circles[rows -j + rows * 2][rows - i -1].setFill(new Color(r, g, b, 1));
+                        //circles[rows -j + rows * 2][rows - i -1].setStroke(Color.BLACK);
+                        circles[j + rows][i + rows * 3 + 1].setStroke(new Color(r, g, b, 1));
+                        circles[j + rows][i + rows * 3 + 1].setStrokeWidth(2.0);
                         break;
                     }
                     case 1: {
                         /*map[i + rows][j + rows * 3 + 1].setPlayerOnField(player);
                         map[rows - i + rows * 2][rows - j - 1].setHomePlayer(player);*/
                         circles[j + rows * 3 + 1][i + rows].setFill(new Color(r, g, b, 1));
+                        //circles[j + rows * 3 + 1][i + rows].setStroke(Color.BLACK);
+                        circles[rows - j - 1][rows - i + rows * 2].setStroke(new Color(r, g, b, 1));
+                        circles[rows - j - 1][rows - i + rows * 2].setStrokeWidth(2.0);
                         break;
                     }
                     case 2: {
                         /*map[rows - i + rows * 2][rows - j + rows * 2].setPlayerOnField(player);
                         map[i + rows][j + rows].setHomePlayer(player);*/
                         circles[rows - j + rows * 2][rows - i + rows * 2].setFill(new Color(r, g, b, 1));
+                        //circles[rows - j + rows * 2][rows - i + rows * 2].setStroke(Color.BLACK);
+                        circles[j + rows][i + rows].setStroke(new Color(r, g, b, 1));
+                        circles[j + rows][i + rows].setStrokeWidth(2.0);
                         break;
                     }
                     case 3: {
                         /*map[i + rows * 3 + 1][j + rows].setPlayerOnField(player);
                         map[rows - i - 1][rows - j + rows * 2].setHomePlayer(player);*/
                         circles[j + rows][i + rows * 3 + 1].setFill(new Color(r, g, b, 1));
+                        //circles[j + rows][i + rows * 3 + 1].setStroke(Color.BLACK);
+                        circles[rows - j + rows * 2][rows - i - 1].setStroke(new Color(r, g, b, 1));
+                        circles[rows - j + rows * 2][rows - i - 1].setStrokeWidth(2.0);
                         break;
                     }
                     case 4: {
                         /*map[rows - i + rows * 2][rows - j - 1].setPlayerOnField(player);
                         map[i + rows][j + rows * 3 + 1].setHomePlayer(player);*/
                         circles[rows - j - 1][rows - i + rows * 2].setFill(new Color(r, g, b, 1));
+                        //circles[rows - j - 1][rows - i + rows * 2].setStroke(Color.BLACK);
+                        circles[j + rows * 3 + 1][i + rows].setStroke(new Color(r, g, b, 1));
+                        circles[j + rows * 3 + 1][i + rows].setStrokeWidth(2.0);
                         break;
                     }
                     case 5: {
                         /*map[i + rows][j + rows].setPlayerOnField(player);
                         map[rows - i + rows * 2][rows - j + rows * 2].setHomePlayer(player);*/
                         circles[j + rows][i + rows].setFill(new Color(r, g, b, 1));
+                        //circles[j + rows][i + rows].setStroke(Color.BLACK);
+                        circles[rows - j + rows * 2][rows - i + rows * 2].setStroke(new Color(r, g, b, 1));
+                        circles[rows - j + rows * 2][rows - i + rows * 2].setStrokeWidth(2.0);
                         break;
                     }
                 }
@@ -172,6 +195,9 @@ public class Map {
         gc.setFill(Color.GREEN);
         gc.setLineWidth(5);
 
+        grid.getChildren().add(myColor);
+        myColor.setFill(new Color(cR, cG, cB, 1));
+
         createStartingPositions(rows);
         for(int i = 0; i < size; i++){
             for(int j =0; j < size; j++){
@@ -184,6 +210,7 @@ public class Map {
 
                     //gc.fillOval( (FIELDSIZE + SPACINGSIZE) * (i+1) + dx, (FIELDSIZE + SPACINGSIZE) * (j+1), FIELDSIZE, FIELDSIZE);
                     circles[i][j] = new Circle((FIELDSIZE + SPACINGSIZE) * (i+1) + dx, (FIELDSIZE + SPACINGSIZE) * (j+1), FIELDSIZE/2, Color.WHITE);
+                    //circles[i][j].setStroke(Color.WHITE);
                     int finalI = i;
                     int finalJ = j;
                     circles[i][j].setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -348,7 +375,7 @@ public class Map {
         return (pawns == 0) && (pawnNumber > 0);
     }
 
-    public Map(int pawnNumber, Connection cn, Pane gr, int nop, double cop[][]){
+    public Map(int pawnNumber, Connection cn, Pane gr, int nop, double cop[][], double cR, double cG, double cB){
         this.pawnNumber = pawnNumber;
         this.connection = cn;
         this.grid = gr;
@@ -356,6 +383,10 @@ public class Map {
         this.colorsOfPlayers = cop;
 
         createMapArray();
+
+        this.cR = cR;
+        this.cG = cG;
+        this.cB = cB;
     }
 
     public static int getMove(){
@@ -388,5 +419,17 @@ public class Map {
     public void makeMove(int xa, int ya, int xb, int yb){
         circles[xb][yb].setFill(circles[xa][ya].getFill());
         circles[xa][ya].setFill(Color. WHITE);
+        //circles[xb][yb].setStroke(Color.BLACK);
+        //circles[xa][ya].setStroke(Color.WHITE);
+    }
+
+    public void underlineColor(boolean s){
+        if(s){
+            myColor.setStroke(Color.BLACK);
+            myColor.setStrokeWidth(5);
+        }
+        else{
+            myColor.setStroke(myColor.getFill());
+        }
     }
 }

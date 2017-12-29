@@ -29,6 +29,10 @@ public class LobbyView implements View {
     private int playerCount = 0;
     private boolean usersSettings = TRUE;
     private boolean master = FALSE;
+    private int position = -1;
+    private double cR;
+    private double cG;
+    private double cB;
 
     double [][]colors = new double[6][3];
 
@@ -82,6 +86,9 @@ public class LobbyView implements View {
                         /*else{
                             cRules[finalI].setSelected(FALSE);
                         }*/
+                        else if(!master && !usersSettings){
+                            cRules[finalI].setSelected(TRUE);
+                        }
                     } else {
                         if(master && usersSettings){
                             String msg = "Settings;RuleOff;";
@@ -92,6 +99,9 @@ public class LobbyView implements View {
                         /*else{
                             cRules[finalI].setSelected(TRUE);
                         }*/
+                        else if(!master && !usersSettings){
+                            cRules[finalI].setSelected(FALSE);
+                        }
                     }
                 }
             });
@@ -162,7 +172,7 @@ public class LobbyView implements View {
                 tChatShow.setText(tChatShow.getText() + tmp[1] + "\n");
             }
         }
-        else if(tmp[0].equals("Cancle")){
+        else if(tmp[0].equals("Cancel")){
             bStart.setText("Start");
         }
         else if(tmp[0].equals("Start")){
@@ -170,7 +180,7 @@ public class LobbyView implements View {
                 //connection.send(message);
                 Stage stageTheLabelBelongs = (Stage) lGameName.getScene().getWindow();
                 //create new view and prepare connection
-                View next = new InGameView(connection, Integer.parseInt(tSize.getText()), playerCount, colors);
+                View next = new InGameView(connection, Integer.parseInt(tSize.getText()), playerCount, colors, cR, cG, cB);
                 connection.setView(next);
 
                 //crate javafx-friendly thread which will call the change
@@ -186,7 +196,9 @@ public class LobbyView implements View {
         }
         else if(tmp[0].equals("Countdown")){
             try{
+                int t = Integer.parseInt(tmp[1])+1;
                 alert.close();
+                alert.setContentText(String.valueOf(t));
                 alert.show();
                 sleep(1000);
                 alert.close();
@@ -255,7 +267,6 @@ public class LobbyView implements View {
             }
         });
 
-        //TODO: goint back to hub
         bLeave.setOnAction(e -> {
             String message="Leave;";
             try{
@@ -372,9 +383,11 @@ public class LobbyView implements View {
             choiceBox.setValue(data[3]);
         //if(tSize.getText().equals(data[4]))
             tSize.setText(data[4]);
+
+            position = Integer.parseInt(data[2]);
             boolean on = FALSE;
             boolean off = FALSE;
-            for(int i=5; i<12; i++){
+            for(int i=5; i<14; i++){
                 if(data[i].equals("RuleOn"))
                     on = TRUE;
                 else if(data[i].equals("RuleOff")) {
@@ -382,7 +395,7 @@ public class LobbyView implements View {
                     on = FALSE;
                 }
                 if(on){
-                    i++;
+                    System.out.println("On, "+i+" ");
                     try{
                         if(!cRules[Integer.parseInt(data[i])].isSelected())
                             cRules[Integer.parseInt(data[i])].setSelected(TRUE);
@@ -391,7 +404,7 @@ public class LobbyView implements View {
                     }
                 }
                 else if(off){
-                    i++;
+                    System.out.println("Off, "+i+" ");
                     try{
                         if(cRules[Integer.parseInt(data[i])].isSelected())
                             cRules[Integer.parseInt(data[i])].setSelected(FALSE);
@@ -425,6 +438,16 @@ public class LobbyView implements View {
             colors[playerCount][2]=b;
 
             playerCount++;
+
+            if(position == 0){
+                cR = r;
+                cG = g;
+                cB = b;
+                position--;
+            }
+            else{
+                position--;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

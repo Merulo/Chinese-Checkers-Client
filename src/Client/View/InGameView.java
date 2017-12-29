@@ -35,8 +35,10 @@ public class InGameView implements View {
     TextField tChat = new TextField();
     TextArea tChatShow = new TextArea();
     Button bMoves = new Button("Wyślij ruchy");
+    Button bSkip = new Button("Anuluj ruch");
+    Button bBackToHub = new Button("Wróc do Hub");
 
-    public InGameView(Connection connection, int s, int counter, double [][]colors){
+    public InGameView(Connection connection, int s, int counter, double [][]colors, double cR, double cG, double cB){
         this.connection = connection;
         for(int i=0; i<10; i++) {
 
@@ -51,7 +53,7 @@ public class InGameView implements View {
                 tChatShow.setScrollTop(Double.MAX_VALUE);
             }
         });
-        mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors);
+        mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors, cR, cG, cB);
 
     }
 
@@ -77,7 +79,7 @@ public class InGameView implements View {
         }
         else if(tmp[0].equals("YourTurn")){
             mapa.setSent(FALSE);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Twój ruch");
             alert.setHeaderText(null);
             alert.setContentText("Wykonaj ruch");
@@ -88,7 +90,8 @@ public class InGameView implements View {
             }catch(Exception ex){
 
             }
-            alert.close();
+            alert.close();*/
+            mapa.underlineColor(TRUE);
         }
         else if(tmp[0].equals("IncorrectMove")){
             mapa.setSent(FALSE);
@@ -97,6 +100,8 @@ public class InGameView implements View {
             popup.setY(200);
             popup.getContent().addAll(new Label("Błędny ruch. Powtórz"));
             popup.show(gridPaneHubLayout.getScene().getWindow());*/
+            mapa.underlineColor(TRUE);
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Błędny rcuh!");
             alert.setHeaderText(null);
@@ -134,9 +139,34 @@ public class InGameView implements View {
                 System.out.println(msg);
                 connection.send(msg);
                 mapa.clearMoves();
+                mapa.underlineColor(FALSE);
             }
             catch (Exception ex){
 
+            }
+        });
+        bSkip.setOnAction(e ->{
+            mapa.clearMoves();
+            mapa.setSent(FALSE);
+        });
+        bBackToHub.setOnAction(e ->{
+            String message="Leave;";
+            try{
+                //connection.send(message);
+                Stage stageTheLabelBelongs = (Stage) tChat.getScene().getWindow();
+                //create new view and prepare connection
+                View next = new HubView(connection);
+                connection.setView(next);
+
+                //crate javafx-friendly thread which will call the change
+                stageTheLabelBelongs.setScene(next.getScene());
+                //run the javafx-friendly thread
+                //task.run();
+                next.parse(message);
+                connection.send(message);
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
             }
         });
 
@@ -165,17 +195,23 @@ public class InGameView implements View {
         //gridPaneHubLayout.setAlignment(Pos.TOP_LEFT);
 
         gridPaneHubLayout.getChildren().add(tChatShow);
-        tChatShow.setLayoutX(1000);
+        tChatShow.setLayoutX(700);
         tChatShow.setLayoutY(0);
         gridPaneHubLayout.getChildren().add(tChat);
-        tChat.setLayoutX(1000);
+        tChat.setLayoutX(700);
         tChat.setLayoutY(500);
         tChatShow.setMinHeight(500);
-        tChatShow.setMinWidth(200);
+        tChatShow.setMaxWidth(200);
         tChat.setMinWidth(200);
         gridPaneHubLayout.getChildren().add(bMoves);
-        bMoves.setLayoutX(1000);
+        bMoves.setLayoutX(700);
         bMoves.setLayoutY(530);
+        gridPaneHubLayout.getChildren().add(bSkip);
+        bSkip.setLayoutX(800);
+        bSkip.setLayoutY(530);
+        gridPaneHubLayout.getChildren().add(bBackToHub);
+        bBackToHub.setLayoutX(700);
+        bBackToHub.setLayoutX(580);
         //gridPaneHubLayout.getChildren().add(canvas);
 
 
