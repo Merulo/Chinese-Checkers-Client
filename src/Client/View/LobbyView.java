@@ -2,6 +2,7 @@ package Client.View;
 
 import Client.Network.Connection;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,9 +21,6 @@ public class LobbyView implements View {
     private boolean usersSettings = TRUE;
     private boolean master = FALSE;
     private int position = -1;
-    private double cR;
-    private double cG;
-    private double cB;
 
     private final double [][]colors = new double[6][3];
 
@@ -148,7 +146,7 @@ public class LobbyView implements View {
                     //connection.send(message);
                     Stage stageTheLabelBelongs = (Stage) lGameName.getScene().getWindow();
                     //create new view and prepare connection
-                    View next = new InGameView(connection, Integer.parseInt(tSize.getText()), playerCount, colors, cR, cG, cB);
+                    View next = new InGameView(connection, Integer.parseInt(tSize.getText()), playerCount, colors);
                     connection.setView(next);
 
                     //crate javafx-friendly thread which will call the change
@@ -276,11 +274,14 @@ public class LobbyView implements View {
         tSize.setOnAction(e ->{
             if(usersSettings) {
                 String message = "Settings;Size;";
-                message = message.concat(tSize.getText());
-                try {
-                    connection.send(message);
-                } catch (Exception ignored) {
+                String num = tSize.getText();
+                if(num.matches("-?\\d+(\\.\\d+)?")){
+                    try {
+                        message = message.concat(num);
+                        connection.send(message);
+                    } catch (Exception ignored) {
 
+                    }
                 }
             }
         });
@@ -410,15 +411,6 @@ public class LobbyView implements View {
 
             playerCount++;
 
-            if(position == 0){
-                cR = r;
-                cG = g;
-                cB = b;
-                position--;
-            }
-            else{
-                position--;
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

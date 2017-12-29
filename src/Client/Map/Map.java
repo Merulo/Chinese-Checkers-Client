@@ -43,9 +43,6 @@ public class Map {
     int numberOfPlayers;
     double [][]colorsOfPlayers = new double[6][3];
     int rows;
-    double cG;
-    double cR;
-    double cB;
 
     private Circle myColor = new Circle(30, 30, 20);
 
@@ -189,11 +186,11 @@ public class Map {
     }
 
     //displays the map
-    public void display(GraphicsContext gc){
+    public void display(/*GraphicsContext gc*/double cR, double cG, double cB){
 
 
-        gc.setFill(Color.GREEN);
-        gc.setLineWidth(5);
+        //gc.setFill(Color.GREEN);
+        //gc.setLineWidth(5);
 
         grid.getChildren().add(myColor);
         myColor.setFill(new Color(cR, cG, cB, 1));
@@ -202,9 +199,9 @@ public class Map {
         for(int i = 0; i < size; i++){
             for(int j =0; j < size; j++){
                 if(array[i][j] != 0){
-                    if(array[i][j] == 2){
+                    /*if(array[i][j] == 2){
                         gc.setFill(Color.BLUE);
-                    }
+                    }*/
 
                     int dx = ((int)(Math.floor(size/2)) - j) * - (FIELDSIZE + SPACINGSIZE)/2;
 
@@ -316,9 +313,9 @@ public class Map {
                     });
                     grid.getChildren().add(circles[i][j]);
 
-                    if(array[i][j] == 2){
+                    /*if(array[i][j] == 2){
                         gc.setFill(Color.GREEN);
-                    }
+                    }*/
                 }
             }
         }
@@ -375,7 +372,7 @@ public class Map {
         return (pawns == 0) && (pawnNumber > 0);
     }
 
-    public Map(int pawnNumber, Connection cn, Pane gr, int nop, double cop[][], double cR, double cG, double cB){
+    public Map(int pawnNumber, Connection cn, Pane gr, int nop, double cop[][]/*, double cR, double cG, double cB*/){
         this.pawnNumber = pawnNumber;
         this.connection = cn;
         this.grid = gr;
@@ -384,9 +381,6 @@ public class Map {
 
         createMapArray();
 
-        this.cR = cR;
-        this.cG = cG;
-        this.cB = cB;
     }
 
     public static int getMove(){

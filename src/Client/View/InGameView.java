@@ -31,6 +31,10 @@ public class InGameView implements View {
     private Group group = new Group();
     private Pane gridPaneHubLayout = new Pane(group);
 
+    private double cR;
+    private double cG;
+    private double cB;
+
 
     private TextField tChat = new TextField();
     private TextArea tChatShow = new TextArea();
@@ -39,7 +43,7 @@ public class InGameView implements View {
     private Button bBackToHub = new Button("Wróc do Hub");
     private Button bSkip = new Button("Pomiń ruch");
 
-    InGameView(Connection connection, int s, int counter, double[][] colors, double cR, double cG, double cB){
+    InGameView(Connection connection, int s, int counter, double[][] colors){
         this.connection = connection;
         /*for(int i=0; i<10; i++) {
 
@@ -49,7 +53,7 @@ public class InGameView implements View {
         //tChatShow.setMouseTransparent(TRUE);
         tChatShow.setFocusTraversable(FALSE);
         tChatShow.textProperty().addListener((ChangeListener<Object>) (observable, oldValue, newValue) -> tChatShow.setScrollTop(Double.MAX_VALUE));
-        mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors, cR, cG, cB);
+        mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors/*, cR, cG, cB*/);
 
     }
 
@@ -104,6 +108,12 @@ public class InGameView implements View {
                 alert.setContentText("Popraw ruch.");
 
                 alert.showAndWait();
+                break;
+            case "YourColor":
+                cR = Double.parseDouble(tmp[3]);
+                cG = Double.parseDouble(tmp[4]);
+                cB = Double.parseDouble(tmp[5]);
+                mapa.display(cR, cG, cB);
                 break;
         }
     }
@@ -177,7 +187,7 @@ public class InGameView implements View {
 
         Canvas canvas = new Canvas(800, 800);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        mapa.display(gc);
+        //mapa.display();
 
 
         canvas.setOnMousePressed(mouseEvent -> System.out.println("X: " + mouseEvent.getX() + " Y: " + mouseEvent.getY()));
