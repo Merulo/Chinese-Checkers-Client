@@ -35,8 +35,9 @@ public class InGameView implements View {
     private TextField tChat = new TextField();
     private TextArea tChatShow = new TextArea();
     private Button bMoves = new Button("Wyślij ruchy");
-    private Button bSkip = new Button("Anuluj ruch");
+    private Button bAbort = new Button("Anuluj ruch");
     private Button bBackToHub = new Button("Wróc do Hub");
+    private Button bSkip = new Button("Pomiń ruch");
 
     InGameView(Connection connection, int s, int counter, double[][] colors, double cR, double cG, double cB){
         this.connection = connection;
@@ -140,7 +141,7 @@ public class InGameView implements View {
                 System.out.println("Sending problems occured.");
             }
         });
-        bSkip.setOnAction(e ->{
+        bAbort.setOnAction(e ->{
             Map.clearMoves();
             Map.setSent(FALSE);
         });
@@ -162,6 +163,15 @@ public class InGameView implements View {
             }
             catch(Exception ex){
                 ex.printStackTrace();
+            }
+        });
+        bSkip.setOnAction(e ->{
+            Map.clearMoves();
+            Map.setSent(FALSE);
+            try{
+                connection.send("Skip;");
+            }catch (Exception ignored){
+
             }
         });
 
@@ -195,12 +205,15 @@ public class InGameView implements View {
         gridPaneHubLayout.getChildren().add(bMoves);
         bMoves.setLayoutX(700);
         bMoves.setLayoutY(530);
-        gridPaneHubLayout.getChildren().add(bSkip);
-        bSkip.setLayoutX(800);
-        bSkip.setLayoutY(530);
+        gridPaneHubLayout.getChildren().add(bAbort);
+        bAbort.setLayoutX(800);
+        bAbort.setLayoutY(530);
         gridPaneHubLayout.getChildren().add(bBackToHub);
-        bBackToHub.setLayoutX(700);
-        bBackToHub.setLayoutX(580);
+        bBackToHub.setLayoutX(800);
+        bBackToHub.setLayoutY(560);
+        gridPaneHubLayout.getChildren().add(bSkip);
+        bSkip.setLayoutX(700);
+        bSkip.setLayoutY(560);
         //gridPaneHubLayout.getChildren().add(canvas);
 
 
