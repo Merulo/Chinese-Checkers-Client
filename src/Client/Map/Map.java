@@ -230,7 +230,7 @@ public class Map {
                                         movesY.add(finalJ);
                                         move++;
                                     }
-                                    else if(((finalI - a) == -2 && (finalJ - b) == 2) || ((finalI - a) == 2 && (finalJ - b) == -2) || ((finalI - a) == 0 && (finalJ - b) == 2) || ((finalI - a) == 0 && (finalJ - b) == -2) || ((finalI - a) == 2 && (finalJ - b) == 0) || ((finalI - a) == 2 && (finalJ - b) == -2)){
+                                    else if(((finalI - a) == -2 && (finalJ - b) == 2) || ((finalI - a) == 2 && (finalJ - b) == -2) || ((finalI - a) == 0 && (finalJ - b) == 2) || ((finalI - a) == 0 && (finalJ - b) == -2) || ((finalI - a) == 2 && (finalJ - b) == 0) || ((finalI - a) == -2 && (finalJ - b) == 0)){
                                         movesX.add(a + ((finalI - a)/2));
                                         movesY.add(b + ((finalJ - b)/2));
                                         System.out.println("a "+a);
@@ -241,10 +241,10 @@ public class Map {
                                         move++;
                                     }
                                     else if(((finalI - a) == -3 && (finalJ - b) == 3)){
-                                        movesX.add(a+1);
+                                        movesX.add(a-1);
                                         movesY.add(b+1);
                                         move++;
-                                        movesX.add(a+2);
+                                        movesX.add(a-2);
                                         movesY.add(b+2);
                                         move++;
                                         movesX.add(finalI);
@@ -252,10 +252,10 @@ public class Map {
                                         move++;
                                     }
                                     else if((finalI - a) == 3 && (finalJ - b) == -3){
-                                        movesX.add(a-1);
+                                        movesX.add(a+1);
                                         movesY.add(b-1);
                                         move++;
-                                        movesX.add(a-2);
+                                        movesX.add(a+2);
                                         movesY.add(b-2);
                                         move++;
                                         movesX.add(finalI);
@@ -288,19 +288,19 @@ public class Map {
                                         movesX.add(a+1);
                                         movesY.add(b);
                                         move++;
-                                        movesX.add(a+1);
+                                        movesX.add(a+2);
                                         movesY.add(b);
                                         move++;
                                         movesX.add(finalI);
                                         movesY.add(finalJ);
                                         move++;
                                     }
-                                    else if(((finalI - a) == 3 && (finalJ - b) == -3)){
-                                        movesX.add(a+1);
-                                        movesY.add(b-1);
+                                    else if(((finalI - a) == -3 && (finalJ - b) == 0)){
+                                        movesX.add(a-1);
+                                        movesY.add(b);
                                         move++;
-                                        movesX.add(a+1);
-                                        movesY.add(b-1);
+                                        movesX.add(a-2);
+                                        movesY.add(b);
                                         move++;
                                         movesX.add(finalI);
                                         movesY.add(finalJ);

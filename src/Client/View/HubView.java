@@ -90,7 +90,6 @@ public class HubView implements View {
 
         tNickname.setPromptText("Nickname");
         for(int i=0; i<10; i++) {
-            //TODO: Specify messages sending to the server.
             //String s = "JOIN;";
             //s = s.concat(String.valueOf(i));
             //String finalS = s;
@@ -98,7 +97,7 @@ public class HubView implements View {
             bEnterGame[i].setOnAction(e -> {
                 if(tNickname.getText().length()>0){
                     String k = new String("Nick;");
-                    k = k.concat(tNickname.getText());
+                    k = k.concat(tNickname.getText().replaceAll(";", ":"));
                     String finalK = k;
                     connection.send(finalK);
 

@@ -54,7 +54,7 @@ public class LobbyView implements View {
     ChoiceBox<String> cKick = new ChoiceBox<>();
     CheckBox[] cRules = new CheckBox[3];
     Button bAddBot = new Button("Dodaj bota");
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    //Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
     public LobbyView(Connection connection){
         this.connection = connection;
@@ -63,9 +63,9 @@ public class LobbyView implements View {
             lNumbers[i] = new Label(String.valueOf(i+1));
         }
 
-        alert.setTitle("Zaczynamy");
-        alert.setHeaderText(null);
-        alert.setContentText("Rozpoczęto odliczanie do startu");
+        //alert.setTitle("Zaczynamy");
+        //alert.setHeaderText(null);
+        //alert.setContentText("Rozpoczęto odliczanie do startu");
 
         cRules[0] = new CheckBox("Ruch na jedno pole obok");
         cRules[1] = new CheckBox("Przeskoczenie jednego, dowolnego pionka");
@@ -195,18 +195,22 @@ public class LobbyView implements View {
             }
         }
         else if(tmp[0].equals("Countdown")){
+            int t = Integer.parseInt(tmp[1])+1;
+            tChatShow.setText(tChatShow.getText() +"<Serwer> Odliczanie do startu: "+String.valueOf(t) + "\n");
+            tChatShow.selectPositionCaret(tChatShow.getLength());
+            tChatShow.deselect();
             try{
-                int t = Integer.parseInt(tmp[1])+1;
-                alert.close();
-                alert.setContentText(String.valueOf(t));
-                alert.show();
-                sleep(1000);
-                alert.close();
+                //int t = Integer.parseInt(tmp[1])+1;
+                //alert.close();
+                //alert.setContentText(String.valueOf(t));
+                //alert.show();
+                //sleep(1000);
+                //alert.close();
             }catch(Exception e) {
                 try {
-                    alert.show();
-                    sleep(1000);
-                    alert.close();
+                    //alert.show();
+                    //sleep(1000);
+                    //alert.close();
                 }catch(Exception ex){
 
                 }
