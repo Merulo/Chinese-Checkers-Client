@@ -387,8 +387,9 @@ public class LobbyView implements View {
             choiceBox.setValue(data[3]);
         //if(tSize.getText().equals(data[4]))
             tSize.setText(data[4]);
-
+        if(position==-1)
             position = Integer.parseInt(data[2]);
+        //System.out.println("pozycja na liście: "+position);
             boolean on = FALSE;
             boolean off = FALSE;
             for(int i=5; i<14; i++){
