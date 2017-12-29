@@ -117,6 +117,7 @@ public class LobbyView implements View {
             }*/
                 while (k < 5) {
                     lPlayers[k].setText(lPlayers[k+1].getText());
+                    lPlayers[k].setTextFill(lPlayers[k+1].getTextFill());
                     k++;
                 }
                 lPlayers[5].setText("");
