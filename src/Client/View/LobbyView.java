@@ -125,6 +125,7 @@ public class LobbyView implements View {
             case "Remove": {
                 String t = tmp[1];
                 int k = -1;
+                playerCount--;
                 try {
                     k = Integer.parseInt(tmp[1]);
                 } catch (Exception e) {
@@ -137,15 +138,11 @@ public class LobbyView implements View {
                     i=6;
                 }
             }*/
-                if (k >= 0) {
-                    if (k < 5 && lPlayers[k].getText().equals(t)) {
-                        while (k < 5) {
-                            lPlayers[k].setText(lPlayers[k + 1].getText());
-                            k++;
-                        }
-                        lPlayers[5].setText("");
-                    }
+                while (k < 5) {
+                    lPlayers[k].setText(lPlayers[k+1].getText());
+                    k++;
                 }
+                lPlayers[5].setText("");
                 break;
             }
             case "Msg":
