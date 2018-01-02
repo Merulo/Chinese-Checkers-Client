@@ -180,6 +180,7 @@ public class InGameView implements View {
             Map.setSent(FALSE);
             try{
                 connection.send("Skip;");
+                mapa.underlineColor(FALSE);
             }catch (Exception ignored){
 
             }
