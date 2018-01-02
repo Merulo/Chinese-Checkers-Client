@@ -3,54 +3,37 @@ package Client.View;
 import Client.Map.Map;
 import Client.Network.Connection;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.scene.input.MouseEvent;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 public class InGameView implements View {
 
-    private Connection connection;
-    private Scene lobby;
-    private Map mapa/* = new Map(5, connection)*/;
+    private final Connection connection;
+    private final Map mapa;
 
 
-    private Group group = new Group();
-    private Pane gridPaneHubLayout = new Pane(group);
-
-    private double cR;
-    private double cG;
-    private double cB;
+    private final Group group = new Group();
+    private final Pane gridPaneHubLayout = new Pane(group);
 
 
-    private TextField tChat = new TextField();
-    private TextArea tChatShow = new TextArea();
-    private Button bMoves = new Button("Wyślij ruchy");
-    private Button bAbort = new Button("Anuluj ruch");
-    private Button bBackToHub = new Button("Wróc do Hub");
-    private Button bSkip = new Button("Pomiń ruch");
+    private final TextField tChat = new TextField();
+    private final TextArea tChatShow = new TextArea();
+    private final Button bMoves = new Button("Wyślij ruchy");
+    private final Button bAbort = new Button("Anuluj ruch");
+    private final Button bBackToHub = new Button("Wróc do Hub");
+    private final Button bSkip = new Button("Pomiń ruch");
 
     InGameView(Connection connection, int s, int counter, double[][] colors){
         this.connection = connection;
-        /*for(int i=0; i<10; i++) {
-
-        }*/
         int tmp = s*(s-1)/2;
         tChatShow.setEditable(FALSE);
-        //tChatShow.setMouseTransparent(TRUE);
         tChatShow.setFocusTraversable(FALSE);
         tChatShow.textProperty().addListener((ChangeListener<Object>) (observable, oldValue, newValue) -> tChatShow.setScrollTop(Double.MAX_VALUE));
         mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors/*, cR, cG, cB*/);
@@ -58,7 +41,6 @@ public class InGameView implements View {
     }
 
     public void parse(String message){
-        System.out.println(message);
         String[] tmp = message.split(";");
         switch (tmp[0]) {
             case "Msg":
@@ -79,27 +61,10 @@ public class InGameView implements View {
                 break;
             case "YourTurn":
                 Map.setSent(FALSE);
-            /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Twój ruch");
-            alert.setHeaderText(null);
-            alert.setContentText("Wykonaj ruch");
-
-            alert.show();
-            try{
-                wait(1000);
-            }catch(Exception ex){
-
-            }
-            alert.close();*/
                 mapa.underlineColor(TRUE);
                 break;
             case "IncorrectMove":
                 Map.setSent(FALSE);
-            /*final Popup popup = new Popup();
-            popup.setX(300);
-            popup.setY(200);
-            popup.getContent().addAll(new Label("Błędny ruch. Powtórz"));
-            popup.show(gridPaneHubLayout.getScene().getWindow());*/
                 mapa.underlineColor(TRUE);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -110,9 +75,9 @@ public class InGameView implements View {
                 alert.showAndWait();
                 break;
             case "YourColor":
-                cR = Double.parseDouble(tmp[3]);
-                cG = Double.parseDouble(tmp[4]);
-                cB = Double.parseDouble(tmp[5]);
+                double cR = Double.parseDouble(tmp[3]);
+                double cG = Double.parseDouble(tmp[4]);
+                double cB = Double.parseDouble(tmp[5]);
                 mapa.display(cR, cG, cB);
                 break;
         }
@@ -141,8 +106,6 @@ public class InGameView implements View {
                 msg = msg.concat(";");
             }
             try {
-                System.out.println("*******************************");
-                System.out.println(msg);
                 connection.send(msg);
                 Map.clearMoves();
                 mapa.underlineColor(FALSE);
@@ -158,7 +121,6 @@ public class InGameView implements View {
         bBackToHub.setOnAction(e ->{
             String message="Leave;";
             try{
-                //connection.send(message);
                 Stage stageTheLabelBelongs = (Stage) tChat.getScene().getWindow();
                 //create new view and prepare connection
                 View next = new HubView(connection);
@@ -167,7 +129,6 @@ public class InGameView implements View {
                 //crate javafx-friendly thread which will call the change
                 stageTheLabelBelongs.setScene(next.getScene());
                 //run the javafx-friendly thread
-                //task.run();
                 next.parse(message);
                 connection.send(message);
             }
@@ -186,23 +147,10 @@ public class InGameView implements View {
             }
         });
 
-        Canvas canvas = new Canvas(800, 800);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        //mapa.display();
-
-
-        canvas.setOnMousePressed(mouseEvent -> System.out.println("X: " + mouseEvent.getX() + " Y: " + mouseEvent.getY()));
-
         //Layout
         //instantiatig the GridPane class*/
-        //GridPane gridPaneHubLayout = new GridPane();
         gridPaneHubLayout.setMinSize(400, 400);
         gridPaneHubLayout.setPadding(new Insets(10, 10, 10, 10));
-
-        //gridPaneHubLayout.setVgap(10);
-        //gridPaneHubLayout.setHgap(10);
-
-        //gridPaneHubLayout.setAlignment(Pos.TOP_LEFT);
 
         gridPaneHubLayout.getChildren().add(tChatShow);
         tChatShow.setLayoutX(700);
@@ -225,11 +173,8 @@ public class InGameView implements View {
         gridPaneHubLayout.getChildren().add(bSkip);
         bSkip.setLayoutX(700);
         bSkip.setLayoutY(560);
-        //gridPaneHubLayout.getChildren().add(canvas);
-
 
         //Setting a scene obect;
-        lobby=new Scene(gridPaneHubLayout);
-        return lobby;
+        return new Scene(gridPaneHubLayout);
     }
 }

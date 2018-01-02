@@ -1,12 +1,9 @@
 package Client.Map;
 
 import Client.Network.Connection;
-import Client.View.InGameView;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -32,17 +29,16 @@ public class Map {
     //the size of space between fields
     private final int SPACINGSIZE = 5;
 
-    private final Connection connection;
     private final Pane grid;
 
     private static boolean isSent = FALSE;
-    public static int move = 0;
-    public static ArrayList<Integer> movesX = new ArrayList<>();
-    public static ArrayList<Integer> movesY = new ArrayList<>();
+    private public static int move = 0;
+    private static ArrayList<Integer> movesX = new ArrayList<>();
+    private static ArrayList<Integer> movesY = new ArrayList<>();
 
-    int numberOfPlayers;
-    double [][]colorsOfPlayers = new double[6][3];
-    int rows;
+    private int numberOfPlayers;
+    private double [][]colorsOfPlayers = new double[6][3];
+    private int rows;
 
     private Circle myColor = new Circle(30, 30, 20);
 
@@ -76,7 +72,6 @@ public class Map {
             }
         }
         //creates the blue starting positions
-        //createStartingPositions(rows);
     }
     //creates the starting positions for players
     private void createStartingPositions(int rows){
@@ -127,55 +122,37 @@ public class Map {
             for (int j = 0; j < rows - i; j++) {
                 switch (option) {
                     case 0: {
-                        /*map[rows - i - 1][rows - j + rows * 2].setPlayerOnField(player);
-                        map[i + rows * 3 + 1][j + rows].setHomePlayer(player);*/
                         circles[rows -j + rows * 2][rows - i -1].setFill(new Color(r, g, b, 1));
-                        //circles[rows -j + rows * 2][rows - i -1].setStroke(Color.BLACK);
                         circles[j + rows][i + rows * 3 + 1].setStroke(new Color(r, g, b, 1));
                         circles[j + rows][i + rows * 3 + 1].setStrokeWidth(2.0);
                         break;
                     }
                     case 1: {
-                        /*map[i + rows][j + rows * 3 + 1].setPlayerOnField(player);
-                        map[rows - i + rows * 2][rows - j - 1].setHomePlayer(player);*/
                         circles[j + rows * 3 + 1][i + rows].setFill(new Color(r, g, b, 1));
-                        //circles[j + rows * 3 + 1][i + rows].setStroke(Color.BLACK);
                         circles[rows - j - 1][rows - i + rows * 2].setStroke(new Color(r, g, b, 1));
                         circles[rows - j - 1][rows - i + rows * 2].setStrokeWidth(2.0);
                         break;
                     }
                     case 2: {
-                        /*map[rows - i + rows * 2][rows - j + rows * 2].setPlayerOnField(player);
-                        map[i + rows][j + rows].setHomePlayer(player);*/
                         circles[rows - j + rows * 2][rows - i + rows * 2].setFill(new Color(r, g, b, 1));
-                        //circles[rows - j + rows * 2][rows - i + rows * 2].setStroke(Color.BLACK);
                         circles[j + rows][i + rows].setStroke(new Color(r, g, b, 1));
                         circles[j + rows][i + rows].setStrokeWidth(2.0);
                         break;
                     }
                     case 3: {
-                        /*map[i + rows * 3 + 1][j + rows].setPlayerOnField(player);
-                        map[rows - i - 1][rows - j + rows * 2].setHomePlayer(player);*/
                         circles[j + rows][i + rows * 3 + 1].setFill(new Color(r, g, b, 1));
-                        //circles[j + rows][i + rows * 3 + 1].setStroke(Color.BLACK);
                         circles[rows - j + rows * 2][rows - i - 1].setStroke(new Color(r, g, b, 1));
                         circles[rows - j + rows * 2][rows - i - 1].setStrokeWidth(2.0);
                         break;
                     }
                     case 4: {
-                        /*map[rows - i + rows * 2][rows - j - 1].setPlayerOnField(player);
-                        map[i + rows][j + rows * 3 + 1].setHomePlayer(player);*/
                         circles[rows - j - 1][rows - i + rows * 2].setFill(new Color(r, g, b, 1));
-                        //circles[rows - j - 1][rows - i + rows * 2].setStroke(Color.BLACK);
                         circles[j + rows * 3 + 1][i + rows].setStroke(new Color(r, g, b, 1));
                         circles[j + rows * 3 + 1][i + rows].setStrokeWidth(2.0);
                         break;
                     }
                     case 5: {
-                        /*map[i + rows][j + rows].setPlayerOnField(player);
-                        map[rows - i + rows * 2][rows - j + rows * 2].setHomePlayer(player);*/
                         circles[j + rows][i + rows].setFill(new Color(r, g, b, 1));
-                        //circles[j + rows][i + rows].setStroke(Color.BLACK);
                         circles[rows - j + rows * 2][rows - i + rows * 2].setStroke(new Color(r, g, b, 1));
                         circles[rows - j + rows * 2][rows - i + rows * 2].setStrokeWidth(2.0);
                         break;
@@ -186,11 +163,7 @@ public class Map {
     }
 
     //displays the map
-    public void display(/*GraphicsContext gc*/double cR, double cG, double cB){
-
-
-        //gc.setFill(Color.GREEN);
-        //gc.setLineWidth(5);
+    public void display(double cR, double cG, double cB){
 
         grid.getChildren().add(myColor);
         myColor.setFill(new Color(cR, cG, cB, 1));
@@ -199,15 +172,10 @@ public class Map {
         for(int i = 0; i < size; i++){
             for(int j =0; j < size; j++){
                 if(array[i][j] != 0){
-                    /*if(array[i][j] == 2){
-                        gc.setFill(Color.BLUE);
-                    }*/
 
                     int dx = ((int)(Math.floor(size/2)) - j) * - (FIELDSIZE + SPACINGSIZE)/2;
 
-                    //gc.fillOval( (FIELDSIZE + SPACINGSIZE) * (i+1) + dx, (FIELDSIZE + SPACINGSIZE) * (j+1), FIELDSIZE, FIELDSIZE);
                     circles[i][j] = new Circle((FIELDSIZE + SPACINGSIZE) * (i+1) + dx, (FIELDSIZE + SPACINGSIZE) * (j+1), FIELDSIZE/2, Color.WHITE);
-                    //circles[i][j].setStroke(Color.WHITE);
                     int finalI = i;
                     int finalJ = j;
                     circles[i][j].setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -215,12 +183,9 @@ public class Map {
                         public void handle(MouseEvent event) {
                             System.out.println(finalI +" "+ finalJ);
                             if(!isSent) {
-                                try {System.out.println("///////////////////////////////////////////////////////////");
+                                try {
                                     int a = movesX.get(move-1);
                                     int b = movesY.get(move-1);
-
-                                    System.out.print(finalI-a+"  ");
-                                    System.out.println(finalJ-b);
 
                                     if (((finalI - a) == -1 && (finalJ - b) == 1) || ((finalI - a) == 1 && (finalJ - b) == -1) || ((finalI - a) == 0 && (finalJ - b) == 1) || ((finalI - a) == 0 && (finalJ - b) == -1) || ((finalI - a) == 1 && (finalJ - b) == 0) || ((finalI - a) == -1 && (finalJ - b) == 0)){
                                         movesX.add(finalI);
@@ -230,8 +195,6 @@ public class Map {
                                     else if(((finalI - a) == -2 && (finalJ - b) == 2) || ((finalI - a) == 2 && (finalJ - b) == -2) || ((finalI - a) == 0 && (finalJ - b) == 2) || ((finalI - a) == 0 && (finalJ - b) == -2) || ((finalI - a) == 2 && (finalJ - b) == 0) || ((finalI - a) == -2 && (finalJ - b) == 0)){
                                         movesX.add(a + ((finalI - a)/2));
                                         movesY.add(b + ((finalJ - b)/2));
-                                        System.out.println("a "+a);
-                                        System.out.println("b "+b);
                                         move++;
                                         movesX.add(finalI);
                                         movesY.add(finalJ);
@@ -312,15 +275,10 @@ public class Map {
                         }
                     });
                     grid.getChildren().add(circles[i][j]);
-
-                    /*if(array[i][j] == 2){
-                        gc.setFill(Color.GREEN);
-                    }*/
                 }
             }
         }
         //draw2Dmap(gc);
-        //createStartingPositions(rows);
         colorPositions();
     }
     //draws the array w/o shifting
@@ -372,9 +330,9 @@ public class Map {
         return (pawns == 0) && (pawnNumber > 0);
     }
 
-    public Map(int pawnNumber, Connection cn, Pane gr, int nop, double cop[][]/*, double cR, double cG, double cB*/){
+    public Map(int pawnNumber, Connection cn, Pane gr, int nop, double cop[][]){
         this.pawnNumber = pawnNumber;
-        this.connection = cn;
+        Connection connection = cn;
         this.grid = gr;
         this.numberOfPlayers = nop;
         this.colorsOfPlayers = cop;
@@ -403,8 +361,6 @@ public class Map {
         for(int i=0; i<move; i++){
             movesX.remove(0);
             movesY.remove(0);
-            //moves[i][0] = 0;
-            //moves[i][1] = 0;
             isSent = TRUE;
         }
         move = 0;
@@ -413,8 +369,6 @@ public class Map {
     public void makeMove(int xa, int ya, int xb, int yb){
         circles[xb][yb].setFill(circles[xa][ya].getFill());
         circles[xa][ya].setFill(Color. WHITE);
-        //circles[xb][yb].setStroke(Color.BLACK);
-        //circles[xa][ya].setStroke(Color.WHITE);
     }
 
     public void underlineColor(boolean s){

@@ -2,7 +2,6 @@ package Client.View;
 
 import Client.Network.Connection;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,7 +23,6 @@ public class LobbyView implements View {
 
     private final double [][]colors = new double[6][3];
 
-
     private final GridPane gridPaneHubLayout = new GridPane();
 
     private final Label[] lPlayers = new Label[6];
@@ -42,7 +40,6 @@ public class LobbyView implements View {
     private final ChoiceBox<String> cKick = new ChoiceBox<>();
     private final CheckBox[] cRules = new CheckBox[3];
     private final Button bAddBot = new Button("Dodaj bota");
-    //Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
     LobbyView(Connection connection){
         this.connection = connection;
@@ -50,10 +47,6 @@ public class LobbyView implements View {
             lPlayers[i] = new Label("");
             lNumbers[i] = new Label(String.valueOf(i+1));
         }
-
-        //alert.setTitle("Zaczynamy");
-        //alert.setHeaderText(null);
-        //alert.setContentText("Rozpoczęto odliczanie do startu");
 
         cRules[0] = new CheckBox("Ruch na jedno pole obok");
         cRules[1] = new CheckBox("Przeskoczenie jednego, dowolnego pionka");
@@ -67,27 +60,23 @@ public class LobbyView implements View {
                         String msg = "Settings;RuleOn;";
                         msg = msg.concat(cRules[finalI].getText());
                         connection.send(msg);
-                        System.out.println(msg);
                     }
                 } else {
                     if(usersSettings){
                         String msg = "Settings;RuleOff;";
                         msg = msg.concat(cRules[finalI].getText());
                         connection.send(msg);
-                        System.out.println(msg);
                     }
                 }
             });
         }
         tChatShow.setEditable(FALSE);
-        //tChatShow.setMouseTransparent(TRUE);
         tChatShow.setFocusTraversable(FALSE);
         tChatShow.textProperty().addListener((ChangeListener<Object>) (observable, oldValue, newValue) -> tChatShow.setScrollTop(Double.MAX_VALUE));
     }
 
     @Override
     public void parse(String message){
-        System.out.println(message);
         String[] tmp = message.split(";");
         switch (tmp[0]) {
             case "GameDetailedData":
@@ -95,7 +84,6 @@ public class LobbyView implements View {
                 parseGameData(tmp);
                 break;
             case "PlayerList":
-                System.out.println("New message");
                 parsePlayerList(tmp);
                 break;
             case "Remove": {
@@ -106,13 +94,6 @@ public class LobbyView implements View {
                 } catch (Exception e) {
                     System.out.println("Parse problem occured");
                 }
-            /*for(int i=0; i<6; i++){
-                if(lPlayers[i].getText().equals(t)) {
-                    k = i;
-                    playerCount--;
-                    i=6;
-                }
-            }*/
                 while (k < 5) {
                     lPlayers[k].setText(lPlayers[k+1].getText());
                     lPlayers[k].setTextFill(lPlayers[k+1].getTextFill());
@@ -143,7 +124,6 @@ public class LobbyView implements View {
                 break;
             case "Start":
                 try {
-                    //connection.send(message);
                     Stage stageTheLabelBelongs = (Stage) lGameName.getScene().getWindow();
                     //create new view and prepare connection
                     View next = new InGameView(connection, Integer.parseInt(tSize.getText()), playerCount, colors);
@@ -152,7 +132,6 @@ public class LobbyView implements View {
                     //crate javafx-friendly thread which will call the change
                     stageTheLabelBelongs.setScene(next.getScene());
                     //run the javafx-friendly thread
-                    //task.run();
                     next.parse(message);
                     connection.send(message);
                 } catch (Exception ex) {
@@ -164,38 +143,12 @@ public class LobbyView implements View {
                 tChatShow.setText(tChatShow.getText() + "<Serwer> Odliczanie do startu: " + String.valueOf(t) + "\n");
                 tChatShow.selectPositionCaret(tChatShow.getLength());
                 tChatShow.deselect();
-                /*try {
-                    //int t = Integer.parseInt(tmp[1])+1;
-                    //alert.close();
-                    //alert.setContentText(String.valueOf(t));
-                    //alert.show();
-                    //sleep(1000);
-                    //alert.close();
-                } catch (Exception e) {
-                    try {
-                        //alert.show();
-                        //sleep(1000);
-                        //alert.close();
-                    } catch (Exception ex) {
-
-                    }
-                }*/
                 break;
             }
             case "Master":
                 master = TRUE;
                 break;
         }
-        /*else if(tmp[0].equals("Size")){
-            usersSettings = FALSE;
-            tSize.setText(tmp[1]);
-            usersSettings = TRUE;
-        }
-        else if(tmp[0].equals("Players")){
-            usersSettings = FALSE;
-            choiceBox.setValue(tmp[1]);
-            usersSettings = TRUE;
-        }*/
     }
     @Override
     public Scene getScene(){
@@ -212,7 +165,6 @@ public class LobbyView implements View {
 
             }
         });
-
 
         choiceBox.getItems().addAll("2", "3", "4", "6");
 
@@ -240,7 +192,6 @@ public class LobbyView implements View {
         bLeave.setOnAction(e -> {
             String message="Leave;";
             try{
-                //connection.send(message);
                 Stage stageTheLabelBelongs = (Stage) lGameName.getScene().getWindow();
                 //create new view and prepare connection
                 View next = new HubView(this.connection);
@@ -250,7 +201,6 @@ public class LobbyView implements View {
 
                 stageTheLabelBelongs.setScene(next.getScene());
                 //run the javafx-friendly thread
-                //task.run();
                 next.parse(message);
                 connection.send(message);
             }
@@ -320,13 +270,10 @@ public class LobbyView implements View {
 
         //Layout
         //instantiatig the GridPane class*/
-        //GridPane gridPaneHubLayout = new GridPane();
         gridPaneHubLayout.setMinSize(300, 300);
         gridPaneHubLayout.setPadding(new Insets(10, 10, 10, 10));
 
         gridPaneHubLayout.setVgap(10);
-        //gridPaneHubLayout.setHgap(10);
-
         gridPaneHubLayout.setAlignment(Pos.TOP_LEFT);
 
         tSize.setMaxWidth(40);
@@ -358,12 +305,9 @@ public class LobbyView implements View {
     }
 
     private void parseGameData(String[] data){
-        //if(lGameName.getText().equals(data[1]))
-            lGameName.setText(data[1]);
-        //if(choiceBox.getValue().equals(data[3]))
-            choiceBox.setValue(data[3]);
-        //if(tSize.getText().equals(data[4]))
-            tSize.setText(data[4]);
+        lGameName.setText(data[1]);
+        choiceBox.setValue(data[3]);
+        tSize.setText(data[4]);
         if(position==-1)
             position = Integer.parseInt(data[2]);
             boolean on = FALSE;
@@ -376,7 +320,6 @@ public class LobbyView implements View {
                     on = FALSE;
                 }
                 if(on){
-                    System.out.println("On, "+i+" ");
                     try{
                         if(!cRules[Integer.parseInt(data[i])].isSelected())
                             cRules[Integer.parseInt(data[i])].setSelected(TRUE);
@@ -385,7 +328,6 @@ public class LobbyView implements View {
                     }
                 }
                 else if(off){
-                    System.out.println("Off, "+i+" ");
                     try{
                         if(cRules[Integer.parseInt(data[i])].isSelected())
                             cRules[Integer.parseInt(data[i])].setSelected(FALSE);
@@ -395,18 +337,10 @@ public class LobbyView implements View {
                 }
             }
         usersSettings = TRUE;
-            //if(data[2].equals("0")) {
-            //if(master){
-                /*gridPaneHubLayout.add(bKick, 3, 3);
-                gridPaneHubLayout.add(cKick, 2, 3);
-                cKick.getItems().addAll("1", "2", "3", "4", "5", "6");*/
-            //}
-
     }
 
     private void parsePlayerList(String[] data) {
         try {
-            System.out.println("New message:" + lPlayers[playerCount].getText());
             double r = Double.parseDouble(data[2]);
             double g = Double.parseDouble(data[3]);
             double b = Double.parseDouble(data[4]);

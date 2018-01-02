@@ -2,72 +2,21 @@ package Client;
 
 import Client.Network.Connection;
 import Client.View.HubView;
-import Client.View.InGameView;
-import Client.View.LobbyView;
 import Client.View.View;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import java.util.Random;
-import javafx.stage.WindowEvent;
-import javafx.event.EventHandler;
 
 public class Main extends Application {
 
-
     private Stage window;
-    private Scene lobby;
-    private Scene in_game;
-
-    /*private Parent createContent(){
-        TextArea messages = new TextArea();
-        messages.setPrefHeight(550);
-        TextField input = new TextField();
-
-        //creates the connection on address and ip
-        Connection connection = new Connection("localhost", 5555);
-        //starts the connection
-        connection.start();
-        connection.addMessageParser(messages);
-
-        //event handler
-        input.setOnAction(event ->{
-            String message = input.getText();
-            input.clear();
-            try {
-                connection.send(message);
-            }
-            catch (Exception e){
-
-            }
-        });
-
-
-        VBox root = new VBox(20, messages, input);
-        root.setPrefSize(600, 600);
-        return root;
-    }*/
-
-    private View curret;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
 
-        //creates the connection on address and ip
         Connection connection = new Connection("localhost", 5555);
-        curret = new HubView(connection);
-        //curret = new LobbyView(connection);
+        View curret = new HubView(connection);
 
-        //starts the connection
         if(!connection.start()){
             System.out.println("CANT ESTABLISH CONNECTION!");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -80,9 +29,7 @@ public class Main extends Application {
         else {
             connection.setView(curret);
 
-            //Swithing the scene: window.setScene( nazwa_sceny );
             window.setTitle("Chinese Checkers");
-            //primaryStage.setScene(new Scene(createContent()));
             window.setScene(curret.getScene());
             window.show();
 
@@ -98,24 +45,4 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }
-
-
-
-
-
-
-
-
-
-    /*    Group root = new Group();
-        Canvas canvas = new Canvas(1024, 768);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        Map map = new Map(6);
-        map.display(gc);
-
-        root.getChildren().add(canvas);
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();*/

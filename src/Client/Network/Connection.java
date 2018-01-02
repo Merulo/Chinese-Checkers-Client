@@ -12,28 +12,25 @@ import java.io.PrintWriter;
 import javafx.application.Platform;
 
 public class Connection {
-    //socket
-    private Socket socket;
     //input output readers
     private BufferedReader in;
     private PrintWriter out;
     //reading thread
     private ConnectionThread connectionThread;
 
-    View current;
+    private View current;
 
-    //TODO: REPLACE WITH PROPER PARSER
-    TextArea messages;
+    private TextArea messages;
 
     //Establishes the connection
     public Connection(String serverAddress, int PORT){
         try {
-            socket = new Socket(serverAddress, PORT);
+            Socket socket = new Socket(serverAddress, PORT);
             in = new BufferedReader(new InputStreamReader( socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             connectionThread = new ConnectionThread();
         }
-        catch(Exception ex){
+        catch(Exception ignored){
 
         }
     }
