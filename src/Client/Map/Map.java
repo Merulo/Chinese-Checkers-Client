@@ -16,31 +16,31 @@ import static java.lang.Boolean.TRUE;
 
 public class Map {
     //number of pawns per Player
-    private int pawnNumber;
+    public int pawnNumber;
     //array with the data. Possibly should be converted to array of objects
     //we need to store starting positions and ending positions
     private int array[][];
     //the size of the array
-    private int size = 0;
+    public int size = 0;
     private Circle circles[][];
 
     //radius of the circle
-    private final int FIELDSIZE = 35;
+    public final int FIELDSIZE = 35;
     //the size of space between fields
-    private final int SPACINGSIZE = 5;
+    public final int SPACINGSIZE = 5;
 
     private final Pane grid;
 
-    private static boolean isSent = FALSE;
-    private public static int move = 0;
-    private static ArrayList<Integer> movesX = new ArrayList<>();
-    private static ArrayList<Integer> movesY = new ArrayList<>();
+    public static boolean isSent = FALSE;
+    private static int move = 0;
+    private ArrayList<Integer> movesX = new ArrayList<>();
+    private ArrayList<Integer> movesY = new ArrayList<>();
 
     private int numberOfPlayers;
     private double [][]colorsOfPlayers = new double[6][3];
     private int rows;
 
-    private Circle myColor = new Circle(30, 30, 20);
+    public Circle myColor = new Circle(30, 30, 20);
 
     //creates map array
     private void createMapArray(){
@@ -345,19 +345,19 @@ public class Map {
         return move;
     }
 
-    public static int getX(int k){
+    public int getX(int k){
         return (int) movesX.get(k);
     }
 
-    public static int getY(int k){
+    public int getY(int k){
         return (int) movesY.get(k);
     }
 
-    public static void setSent(boolean t){
+    public void setSent(boolean t){
         isSent = t;
     }
 
-    public static void clearMoves(){
+    public void clearMoves(){
         for(int i=0; i<move; i++){
             movesX.remove(0);
             movesY.remove(0);

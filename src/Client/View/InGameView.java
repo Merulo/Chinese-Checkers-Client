@@ -30,13 +30,13 @@ public class InGameView implements View {
     private final Button bBackToHub = new Button("Wróc do Hub");
     private final Button bSkip = new Button("Pomiń ruch");
 
-    InGameView(Connection connection, int s, int counter, double[][] colors){
+    public InGameView(Connection connection, int s, int counter, double[][] colors){
         this.connection = connection;
         int tmp = s*(s-1)/2;
         tChatShow.setEditable(FALSE);
         tChatShow.setFocusTraversable(FALSE);
         tChatShow.textProperty().addListener((ChangeListener<Object>) (observable, oldValue, newValue) -> tChatShow.setScrollTop(Double.MAX_VALUE));
-        mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors/*, cR, cG, cB*/);
+        mapa = new Map(tmp, connection, gridPaneHubLayout, counter, colors);
 
     }
 
@@ -60,11 +60,11 @@ public class InGameView implements View {
                 mapa.makeMove(Integer.parseInt(tmpA[0]), Integer.parseInt(tmpA[1]), Integer.parseInt(tmpB[0]), Integer.parseInt(tmpB[1]));
                 break;
             case "YourTurn":
-                Map.setSent(FALSE);
+                mapa.setSent(FALSE);
                 mapa.underlineColor(TRUE);
                 break;
             case "IncorrectMove":
-                Map.setSent(FALSE);
+                mapa.setSent(FALSE);
                 mapa.underlineColor(TRUE);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -100,14 +100,14 @@ public class InGameView implements View {
         bMoves.setOnAction(e ->{
             String msg = "Moves;";
             for(int i = 0; i< Map.getMove(); i++){
-                msg = msg.concat(String.valueOf(Map.getX(i)));
+                msg = msg.concat(String.valueOf(mapa.getX(i)));
                 msg = msg.concat(",");
-                msg = msg.concat(String.valueOf(Map.getY(i)));
+                msg = msg.concat(String.valueOf(mapa.getY(i)));
                 msg = msg.concat(";");
             }
             try {
                 connection.send(msg);
-                Map.clearMoves();
+                mapa.clearMoves();
                 mapa.underlineColor(FALSE);
             }
             catch (Exception ex){
@@ -115,8 +115,8 @@ public class InGameView implements View {
             }
         });
         bAbort.setOnAction(e ->{
-            Map.clearMoves();
-            Map.setSent(FALSE);
+            mapa.clearMoves();
+            mapa.setSent(FALSE);
         });
         bBackToHub.setOnAction(e ->{
             String message="Leave;";
@@ -137,8 +137,8 @@ public class InGameView implements View {
             }
         });
         bSkip.setOnAction(e ->{
-            Map.clearMoves();
-            Map.setSent(FALSE);
+            mapa.clearMoves();
+            mapa.setSent(FALSE);
             try{
                 connection.send("Skip;");
                 mapa.underlineColor(FALSE);

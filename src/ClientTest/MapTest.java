@@ -1,33 +1,37 @@
 package ClientTest;
 
+import Client.Map.Map;
+import Client.Network.Connection;
+import javafx.scene.layout.Pane;
 import junit.framework.TestCase;
 
 public class MapTest extends TestCase {
+    Connection cn = new Connection("localhost", 5555);
+    double [][]colors=new double[1][3];
 
-    public void testDisplay() throws Exception {
+    Map map = new Map(2, cn, new Pane(), 1, colors);
+
+    public void testPawnNumbers() throws Exception {
+        assertEquals(map.pawnNumber, 3);
     }
 
-    public void testDraw2Dmap() throws Exception {
+    public void testSize() throws Exception {
+        assertEquals(map.size, 9);
     }
 
-    public void testGetMove() throws Exception {
+    public void testFieldSize() throws Exception {
+        assertEquals(map.FIELDSIZE, 35);
     }
 
-    public void testGetX() throws Exception {
+    public void testSacingSize() throws Exception {
+        assertEquals(map.SPACINGSIZE, 5);
     }
 
-    public void testGetY() throws Exception {
+    public void testSent() throws Exception {
+        assertNotNull(map.isSent);
     }
 
-    public void testSetSent() throws Exception {
-    }
-
-    public void testClearMoves() throws Exception {
-    }
-
-    public void testMakeMove() throws Exception {
-    }
-
-    public void testUnderlineColor() throws Exception {
+    public void testRadius() throws Exception {
+        assertEquals(map.myColor.getRadius(), 20.0);
     }
 }

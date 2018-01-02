@@ -16,7 +16,7 @@ public class Connection {
     private BufferedReader in;
     private PrintWriter out;
     //reading thread
-    private ConnectionThread connectionThread;
+    public ConnectionThread connectionThread;
 
     private View current;
 
@@ -47,7 +47,6 @@ public class Connection {
         return true;
     }
 
-    //TODO: ADD PROPER PARSER
     public void addMessageParser(TextArea messages){
         this.messages = messages;
     }
@@ -63,12 +62,9 @@ public class Connection {
                 while (true) {
                     String message = in.readLine();
                     if (message == null){
-                        //TODO: EXIT APPLICATION, CONNECTION LOST
+                        System.exit(1);
                         return;
                     }
-                    //TODO: PARSE THE MESSAGE AND THEN DECIDE WHAT TO DO
-                    //messages.appendText(message);
-                    System.out.println("GOT MESSAGE: " + message);
 
                     Platform.runLater(new Runnable() {
                         @Override public void run() {
@@ -77,15 +73,6 @@ public class Connection {
                             }
                         }
                     });
-
-
-
-                    //Into hub:
-                    //parseMessage(message);
-                    //if(current != null) {
-
-                    //}
-
                 }
             }
             catch (Exception ex){
